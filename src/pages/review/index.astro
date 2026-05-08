@@ -1,0 +1,208 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { members } from "../../data/members";
+import { projects } from "../../data/projects";
+import { researchTopics } from "../../data/researchTopics";
+import { formatDate, topicStatusLabels } from "../../utils/format";
+import { withBase } from "../../utils/links";
+
+const newsEntries = (await getCollection("news")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+const changelogEntries = (await getCollection("changelog")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+
+const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
+const roadmapStatusLabels = {
+  todo: "待启动",
+  doing: "进行中",
+  done: "已完成"
+} as const;
+
+const reviewStats = {
+  activeProjects: projects.filter((project) => project.status === "active").length,
+  doingMilestones: projects.flatMap((project) => project.roadmap).filter((item) => item.status === "doing").length,
+  validatingTopics: researchTopics.filter((topic) => ["researching", "validating"].includes(topic.status)).length,
+  recentItems: newsEntries.slice(0, 3).length + changelogEntries.slice(0, 3).length
+};
+
+const upcomingMilestones = projects
+  .flatMap((project) =>
+    project.roadmap
+      .filter((item) => item.status !== "done")
+      .map((item) => ({
+        ...item,
+        projectId: project.id,
+        projectName: project.name,
+        leaderName: memberMap[project.leaderId]?.name ?? "未设置"
+      }))
+  )
+  .sort((a, b) => {
+    const dateA = a.targetDate ? +new Date(a.targetDate) : Number.MAX_SAFE_INTEGER;
+    const dateB = b.targetDate ? +new Date(b.targetDate) : Number.MAX_SAFE_INTEGER;
+    return dateA - dateB;
+  });
+
+const projectBoard = projects
+  .map((project) => ({
+    id: project.id,
+    name: project.name,
+    summary: project.summary,
+    leaderName: memberMap[project.leaderId]?.name ?? "未设置",
+    currentMilestone: project.roadmap.find((item) => item.status === "doing") ?? project.roadmap.find((item) => item.status === "todo"),
+    latestUpdate: [...project.updates].sort((a, b) => +new Date(b.date) - +new Date(a.date))[0]
+  }))
+  .sort((a, b) => {
+    const aHasDoing = a.currentMilestone?.status === "doing" ? 0 : 1;
+    const bHasDoing = b.currentMilestone?.status === "doing" ? 0 : 1;
+    return aHasDoing - bHasDoing;
+  });
+
+const topicActions = researchTopics
+  .filter((topic) => ["tracking", "researching", "validating"].includes(topic.status))
+  .flatMap((topic) =>
+    topic.nextSteps.map((step) => ({
+      title: topic.title,
+      status: topic.status,
+      updatedAt: topic.updatedAt,
+      step,
+      memberNames: topic.memberIds.map((id) => memberMap[id]?.name ?? id).join("、")
+    }))
+  )
+  .slice(0, 10);
+
+const recentFeed = [
+  ...newsEntries.slice(0, 3).map((entry) => ({
+    type: "动态",
+    date: entry.data.date,
+    title: entry.data.title,
+    summary: entry.data.summary
+  })),
+  ...changelogEntries.slice(0, 3).map((entry) => ({
+    type: "更新",
+    date: entry.data.date,
+    title: `${entry.data.version} · ${entry.data.summary}`,
+    summary: entry.body
+  }))
+]
+  .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+  .slice(0, 6);
+---
+
+<Layout title="组会栏" description="集中查看项目推进、近期里程碑、课题行动项与最新更新，方便 AD3R 在组会中快速对齐进度。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">Review</p>
+    <h1>组会栏</h1>
+    <p>把项目推进、里程碑、课题动作和最新动态汇总到一个页面，用于组会、周会和阶段性复盘；站点其他页面继续保持常规官网展示用途。</p>
+  </section>
+
+  <section class="stat-grid meeting-grid">
+    <article class="stat-card card"><strong>{reviewStats.activeProjects}</strong><span>活跃项目</span></article>
+    <article class="stat-card card"><strong>{reviewStats.doingMilestones}</strong><span>进行中里程碑</span></article>
+    <article class="stat-card card"><strong>{reviewStats.validatingTopics}</strong><span>重点课题推进中</span></article>
+    <article class="stat-card card"><strong>{reviewStats.recentItems}</strong><span>近期动态与更新</span></article>
+  </section>
+
+  <section class="grid grid-sidebar">
+    <article class="card">
+      <SectionHeader
+        title="近期里程碑"
+        description="按目标时间排序，适合组会先看当前进行中和即将推进的事项。"
+        linkHref={withBase("/projects/")}
+        linkLabel="查看全部项目"
+      />
+      <div class="content-stack compact-stack">
+        {upcomingMilestones.slice(0, 8).map((item) => (
+          <article class="timeline-item compact">
+            <div>
+              <span class="timeline-dot"></span>
+            </div>
+            <div>
+              <p class="muted">{item.projectName} · 负责人 {item.leaderName}</p>
+              <h3>{item.title}</h3>
+              <div class="meta-list">
+                <span>{roadmapStatusLabels[item.status]}</span>
+                <span>{item.targetDate ? formatDate(item.targetDate) : "待定"}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </article>
+
+    <article class="card">
+      <SectionHeader
+        title="课题行动清单"
+        description="把正在追踪、研究和验证中的动作项拉平成清单，方便逐条确认。"
+        linkHref={withBase("/topics/")}
+        linkLabel="查看课题页"
+      />
+      <div class="content-stack compact-stack">
+        {topicActions.map((item) => (
+          <article class="action-card">
+            <div class="card-heading split-wrap">
+              <h3>{item.title}</h3>
+              <span class="text-chip">{topicStatusLabels[item.status]}</span>
+            </div>
+            <p>{item.step}</p>
+            <div class="meta-list">
+              <span>相关成员：{item.memberNames}</span>
+              <span>{formatDate(item.updatedAt)}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <SectionHeader title="项目推进看板" description="逐个项目查看负责人、当前里程碑和最近更新，适合组会快速过整体规划。" />
+    <div class="grid grid-3">
+      {projectBoard.map((project) => (
+        <article class="card focus-card">
+          <div class="card-heading split-wrap">
+            <h3>{project.name}</h3>
+            <a class="text-link" href={withBase(`/projects/${project.id}/`)}>查看详情</a>
+          </div>
+          <p>{project.summary}</p>
+          <p class="muted">负责人：{project.leaderName}</p>
+          {project.currentMilestone ? (
+            <>
+              <p><strong>当前里程碑：</strong>{project.currentMilestone.title}</p>
+              <div class="meta-list">
+                <span>{roadmapStatusLabels[project.currentMilestone.status]}</span>
+                <span>{project.currentMilestone.targetDate ? formatDate(project.currentMilestone.targetDate) : "时间待定"}</span>
+              </div>
+            </>
+          ) : (
+            <p class="muted">当前尚未设置里程碑。</p>
+          )}
+          {project.latestUpdate && (
+            <div class="focus-update">
+              <p class="muted">最近更新 · {formatDate(project.latestUpdate.date)}</p>
+              <p><strong>{project.latestUpdate.title}</strong></p>
+              <p>{project.latestUpdate.content}</p>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <SectionHeader title="近期动态与更新" description="用于会前快速回顾最近输出，避免遗漏阶段性更新。" />
+    <div class="timeline card">
+      {recentFeed.map((item) => (
+        <article class="timeline-item">
+          <div>
+            <span class="timeline-dot"></span>
+          </div>
+          <div>
+            <p class="muted">{item.type} · {formatDate(item.date)}</p>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>

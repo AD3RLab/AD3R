@@ -72,6 +72,7 @@ export const siteConfig = {
     { label: "课题", href: "/topics/" },
     { label: "动态", href: "/news/" },
     { label: "更新日志", href: "/changelog/" },
+    { label: "组会", href: "/review/" },
     { label: "关于", href: "/about/" }
   ]
 } as const;
