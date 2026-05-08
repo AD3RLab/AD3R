@@ -25,6 +25,24 @@ const featuredProjects = [...projects].sort((a, b) => +new Date(b.updatedAt) - +
 const featuredAchievements = [...achievements].sort((a, b) => +new Date(b.date) - +new Date(a.date)).slice(0, 3);
 const featuredTopics = [...researchTopics].sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).slice(0, 3);
 const activeProjectCount = projects.filter((project) => project.status === "active").length;
+const homepageCapabilities = [
+  {
+    title: "真实数据到三维场景资产",
+    description: "面向自动驾驶真实世界采集数据，构建从多模态输入到高保真三维场景资产的完整重建链路。"
+  },
+  {
+    title: "动态场景结构化表达",
+    description: "围绕道路环境、动态 actor、事件过程和可编辑对象进行结构化建模，支撑复现、分析与编辑。"
+  },
+  {
+    title: "工程化渲染与仿真接入",
+    description: "支持将重建结果接入 Unreal Engine、Web 展示与仿真流程，服务研发验证、演示和测试闭环。"
+  },
+  {
+    title: "语义增强与可复用能力",
+    description: "结合 AIGC、3D 语义理解与知识组织，让场景资产具备可检索、可扩展和持续复用能力。"
+  }
+];
 const timeline = [
   ...newsEntries.slice(0, 3).map((entry) => ({
     date: entry.data.date,
@@ -60,42 +78,31 @@ const timeline = [
 
   <section class="grid grid-2 section-panel">
     <article class="card">
-      <SectionHeader title="团队简介" eyebrow="Overview" />
+      <SectionHeader title="团队定位" eyebrow="Overview" />
       <p>{siteConfig.mission}</p>
-      <p class="muted">当前站点以项目、课题、成果和动态四条主线组织信息，方便对外展示团队建设重点，也便于内部同步阶段进展。</p>
+      <p class="muted">{siteConfig.positioning}</p>
     </article>
     <article class="card">
-      <SectionHeader title="核心研究方向" eyebrow="Focus" />
+      <SectionHeader title="服务对象" eyebrow="Audience" />
+      <p>围绕自动驾驶真实世界数据资产化需求，服务于以下典型研发与业务场景。</p>
       <div class="tag-row">
-        {siteConfig.researchDirections.map((direction) => <span class="text-chip large">{direction}</span>)}
+        {siteConfig.audience.map((item) => <span class="text-chip large">{item}</span>)}
       </div>
     </article>
   </section>
 
   <section class="section-panel section-panel-alt">
     <SectionHeader
-      title="能力框架"
-      description="以下能力用于概括 AD3R 当前的建设方向，避免与上方团队简介重复叙述。"
+      title="研发主线"
+      description="聚焦自动驾驶场景资产化的关键环节，从重建质量、结构化表达、接入方式到可复用能力持续推进。"
     />
-    <div class="grid grid-3">
-      {siteConfig.capabilities.map((item) => (
+    <div class="grid grid-2">
+      {homepageCapabilities.map((item) => (
         <article class="card">
           <h3>{item.title}</h3>
           <p>{item.description}</p>
         </article>
       ))}
-    </div>
-  </section>
-
-  <section class="section-panel">
-    <SectionHeader
-      title="内部协同"
-      description="组会、周会或阶段复盘时，可直接进入专门的组会栏查看里程碑、行动项和最近更新。"
-      linkHref={withBase("/review/")}
-      linkLabel="进入组会栏"
-    />
-    <div class="card">
-      <p>站点的常规页面仍保持对外展示导向；组会相关的推进视图、里程碑排序、行动清单和近期更新已经集中收拢到单独页面，避免首页与列表页过于内部化。</p>
     </div>
   </section>
 

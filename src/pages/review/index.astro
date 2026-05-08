@@ -74,7 +74,8 @@ const topicActions = researchTopics
 const topicBoard = researchTopics
   .map((topic) => ({
     ...topic,
-    memberNames: topic.memberIds.map((id) => memberMap[id]?.name ?? id).join("、")
+    memberNames: topic.memberIds.map((id) => memberMap[id]?.name ?? id).join("、"),
+    nextStep: topic.nextSteps[0] ?? "待补充"
   }))
   .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
 
@@ -96,15 +97,16 @@ const recentFeed = [
   .slice(0, 6);
 ---
 
-<Layout title="组会栏" description="集中查看项目推进、近期里程碑、课题行动项与最新更新，方便 AD3R 在组会中快速对齐进度。">
+<Layout title="组会面板" description="集中查看项目推进、里程碑、课题状态与近期更新，便于 AD3R 在周会中快速对齐进度。">
   <section class="page-hero card surface-gradient section-panel">
     <p class="section-eyebrow">Review</p>
-    <h1>组会栏</h1>
-    <p>把项目推进、里程碑、课题动作和最新动态汇总到一个页面，用于组会、周会和阶段性复盘；站点其他页面继续保持常规官网展示用途。</p>
+    <h1>组会面板</h1>
+    <p>聚合项目推进、课题状态、近期里程碑与最新更新，适用于周会、阶段复盘和研发进度同步。</p>
     <div class="anchor-row">
-      <a class="text-chip" href="#review-milestones">近期里程碑</a>
-      <a class="text-chip" href="#review-topics">课题状态</a>
+      <a class="text-chip" href="#review-topics">课题总表</a>
+      <a class="text-chip" href="#review-actions">待跟进事项</a>
       <a class="text-chip" href="#review-projects">项目推进</a>
+      <a class="text-chip" href="#review-milestones">里程碑</a>
       <a class="text-chip" href="#review-updates">近期更新</a>
     </div>
   </section>
@@ -116,37 +118,46 @@ const recentFeed = [
     <article class="stat-card card"><strong>{reviewStats.recentItems}</strong><span>近期动态与更新</span></article>
   </section>
 
-  <section class="grid grid-sidebar section-panel" id="review-milestones">
+  <section class="grid grid-sidebar section-panel" id="review-topics">
     <article class="card">
       <SectionHeader
-        title="近期里程碑"
-        description="按目标时间排序，适合组会先看当前进行中和即将推进的事项。"
-        linkHref={withBase("/projects/")}
-        linkLabel="查看全部项目"
+        title="课题总表"
+        description="按最近更新时间排序，适合周会时快速查看每个课题的当前状态、下一步和详情入口。"
+        linkHref={withBase("/topics/")}
+        linkLabel="查看全部课题"
       />
-      <div class="content-stack compact-stack">
-        {upcomingMilestones.slice(0, 8).map((item) => (
-          <article class="timeline-item compact">
-            <div>
-              <span class="timeline-dot"></span>
-            </div>
-            <div>
-              <p class="muted">{item.projectName} · 负责人 {item.leaderName}</p>
-              <h3>{item.title}</h3>
-              <div class="meta-list">
-                <span>{roadmapStatusLabels[item.status]}</span>
-                <span>{item.targetDate ? formatDate(item.targetDate) : "待定"}</span>
-              </div>
-            </div>
-          </article>
-        ))}
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>课题</th>
+              <th>状态</th>
+              <th>相关成员</th>
+              <th>下一步</th>
+              <th>更新时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            {topicBoard.map((topic) => (
+              <tr>
+                <td>
+                  <a class="table-link" href={withBase(`/topics/${topic.id}/`)}>{topic.title}</a>
+                </td>
+                <td>{topicStatusLabels[topic.status]}</td>
+                <td>{topic.memberNames}</td>
+                <td>{topic.nextStep}</td>
+                <td>{formatDate(topic.updatedAt)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </article>
 
-    <article class="card">
+    <article class="card" id="review-actions">
       <SectionHeader
-        title="课题行动清单"
-        description="把正在追踪、研究和验证中的动作项拉平成清单，方便逐条确认。"
+        title="待跟进事项"
+        description="聚焦当前仍在推进中的关键动作，适合在周会中逐条确认负责人和下一步。"
         linkHref={withBase("/topics/")}
         linkLabel="查看课题页"
       />
@@ -166,28 +177,6 @@ const recentFeed = [
         ))}
       </div>
     </article>
-  </section>
-
-  <section class="section-panel section-panel-alt" id="review-topics">
-    <SectionHeader title="课题状态面板" description="直接查看所有课题当前状态、负责人和最近进展，可一键跳到详情页继续展开。" />
-    <div class="grid grid-2">
-      {topicBoard.map((topic) => (
-        <article class="card action-card">
-          <div class="card-heading split-wrap">
-            <h3><a href={withBase(`/topics/${topic.id}/`)}>{topic.title}</a></h3>
-            <span class="text-chip">{topicStatusLabels[topic.status]}</span>
-          </div>
-          <p>{topic.progress}</p>
-          <div class="meta-list">
-            <span>相关成员：{topic.memberNames}</span>
-            <span>最近更新：{formatDate(topic.updatedAt)}</span>
-          </div>
-          <div class="tag-row compact">
-            {topic.nextSteps.slice(0, 2).map((step) => <span class="text-chip">{step}</span>)}
-          </div>
-        </article>
-      ))}
-    </div>
   </section>
 
   <section class="section-panel" id="review-projects">
@@ -221,6 +210,34 @@ const recentFeed = [
           )}
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="section-panel section-panel-alt" id="review-milestones">
+    <SectionHeader title="近期里程碑" description="按目标时间排序，优先展示当前进行中和接下来需要推进的关键节点。" />
+    <div class="table-wrap card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>里程碑</th>
+            <th>状态</th>
+            <th>负责人</th>
+            <th>目标时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          {upcomingMilestones.slice(0, 10).map((item) => (
+            <tr>
+              <td><a class="table-link" href={withBase(`/projects/${item.projectId}/`)}>{item.projectName}</a></td>
+              <td>{item.title}</td>
+              <td>{roadmapStatusLabels[item.status]}</td>
+              <td>{item.leaderName}</td>
+              <td>{item.targetDate ? formatDate(item.targetDate) : "待定"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 

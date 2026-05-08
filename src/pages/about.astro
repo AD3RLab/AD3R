@@ -24,7 +24,7 @@ import { siteConfig } from "../data/site";
   </section>
 
   <section class="card">
-    <SectionHeader title="核心能力" description="以下能力描述统一维护在 `src/data/site.ts`，便于后续持续更新官网表达。" />
+    <SectionHeader title="核心能力" description="围绕真实数据采集、三维重建、结构化表达、仿真接入和语义增强等关键环节持续建设。" />
     <div class="grid grid-2">
       {siteConfig.capabilities.map((item) => (
         <article class="card">
@@ -32,6 +32,13 @@ import { siteConfig } from "../data/site";
           <p>{item.description}</p>
         </article>
       ))}
+    </div>
+  </section>
+
+  <section class="card">
+    <SectionHeader title="研究方向" />
+    <div class="tag-row">
+      {siteConfig.researchDirections.map((direction) => <span class="text-chip large">{direction}</span>)}
     </div>
   </section>
 

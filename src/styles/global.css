@@ -580,6 +580,39 @@ ul {
   border: 1px solid rgba(219, 229, 240, 0.9);
 }
 
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 780px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.9rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: rgba(244, 248, 255, 0.9);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.table-link {
+  font-weight: 700;
+}
+
 .news-article {
   padding: clamp(1.25rem, 2vw, 2rem);
 }
