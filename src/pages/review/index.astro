@@ -117,7 +117,7 @@ const recentFeed = [
     <article class="stat-card card"><strong>{reviewStats.recentItems}</strong><span>近期动态与更新</span></article>
   </section>
 
-  <section class="grid review-grid section-panel" id="review-topics">
+  <section class="section-panel" id="review-topics">
     <article class="card">
       <SectionHeader
         title="课题总表"
@@ -152,17 +152,19 @@ const recentFeed = [
         </table>
       </div>
     </article>
+  </section>
 
-    <article class="card" id="review-actions">
+  <section class="section-panel" id="review-actions">
+    <article class="card">
       <SectionHeader
         title="待跟进事项"
         description="聚焦当前仍在推进中的关键动作，适合在周会中逐条确认负责人和下一步。"
         linkHref={withBase("/topics/")}
         linkLabel="查看课题页"
       />
-      <div class="content-stack compact-stack scroll-panel">
+      <div class="content-stack compact-stack scroll-panel tight">
         {topicActions.map((item) => (
-          <article class="action-card">
+          <article class="action-card review-action-item">
             <div class="card-heading split-wrap">
               <h3><a href={withBase(`/topics/${item.id}/`)}>{item.title}</a></h3>
               <span class="text-chip">{topicStatusLabels[item.status]}</span>
@@ -187,7 +189,7 @@ const recentFeed = [
             <th>项目</th>
             <th>负责人</th>
             <th>当前里程碑</th>
-            <th>状态</th>
+            <th>目标时间</th>
             <th>最近更新</th>
           </tr>
         </thead>
@@ -197,7 +199,7 @@ const recentFeed = [
               <td><a class="table-link" href={withBase(`/projects/${project.id}/`)}>{project.name}</a></td>
               <td>{project.leaderName}</td>
               <td>{project.currentMilestone?.title ?? "待补充"}</td>
-              <td>{project.currentMilestone ? roadmapStatusLabels[project.currentMilestone.status] : "待定"}</td>
+              <td>{project.currentMilestone?.targetDate ? formatDate(project.currentMilestone.targetDate) : "待定"}</td>
               <td>{project.latestUpdate ? `${formatDate(project.latestUpdate.date)} · ${project.latestUpdate.title}` : "暂无更新"}</td>
             </tr>
           ))}
@@ -206,8 +208,8 @@ const recentFeed = [
     </div>
   </section>
 
-  <section class="grid review-grid section-panel section-panel-alt">
-    <article id="review-milestones" class="card">
+  <section class="section-panel section-panel-alt" id="review-milestones">
+    <article class="card">
       <SectionHeader title="近期里程碑" description="按目标时间排序，优先展示当前进行中和接下来需要推进的关键节点。" />
       <div class="table-wrap scroll-panel tight">
         <table class="data-table">
@@ -234,8 +236,10 @@ const recentFeed = [
         </table>
       </div>
     </article>
+  </section>
 
-    <article id="review-updates" class="card">
+  <section class="section-panel section-panel-alt" id="review-updates">
+    <article class="card">
       <SectionHeader title="近期动态与更新" description="会前快速回顾最近输出和版本变化。" />
       <div class="timeline scroll-panel tight">
         {recentFeed.map((item) => (

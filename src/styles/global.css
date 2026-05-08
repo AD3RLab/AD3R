@@ -327,10 +327,6 @@ ul {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.review-grid {
-  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
-}
-
 .card-link {
   display: grid;
   gap: 1rem;
@@ -593,13 +589,13 @@ ul {
 }
 
 .scroll-panel {
-  max-height: 28rem;
+  max-height: 24rem;
   overflow: auto;
   padding-right: 0.35rem;
 }
 
 .scroll-panel.tight {
-  max-height: 22rem;
+  max-height: 18rem;
 }
 
 .data-table {
@@ -652,6 +648,11 @@ ul {
 .action-card {
   display: grid;
   gap: 0.85rem;
+}
+
+.review-action-item + .review-action-item {
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
 }
 
 .focus-card h3,
@@ -735,7 +736,6 @@ ul {
   .grid-2,
   .grid-3,
   .grid-sidebar,
-  .review-grid,
   .footer-grid,
   .info-grid,
   .screenshot-grid,
