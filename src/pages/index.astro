@@ -106,6 +106,16 @@ const timeline = [
     </div>
   </section>
 
+  <section class="section-panel">
+    <SectionHeader
+      title="核心研究方向"
+      description="当前重点关注的技术方向覆盖自动驾驶场景重建、资产表达、渲染接入与语义增强。"
+    />
+    <div class="tag-row">
+      {siteConfig.researchDirections.map((direction) => <span class="text-chip large">{direction}</span>)}
+    </div>
+  </section>
+
   <section class="section-panel section-panel-alt">
     <SectionHeader
       title="重点产品与项目"

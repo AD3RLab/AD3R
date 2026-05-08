@@ -276,6 +276,10 @@ ul {
   gap: var(--space-3);
 }
 
+.stat-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
 .hero-metrics {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: end;
@@ -321,6 +325,10 @@ ul {
 
 .meeting-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.review-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.9fr);
 }
 
 .card-link {
@@ -584,6 +592,16 @@ ul {
   overflow-x: auto;
 }
 
+.scroll-panel {
+  max-height: 28rem;
+  overflow: auto;
+  padding-right: 0.35rem;
+}
+
+.scroll-panel.tight {
+  max-height: 22rem;
+}
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -717,12 +735,17 @@ ul {
   .grid-2,
   .grid-3,
   .grid-sidebar,
+  .review-grid,
   .footer-grid,
   .info-grid,
   .screenshot-grid,
   .showcase-grid,
   .detail-header {
     grid-template-columns: 1fr;
+  }
+
+  .meeting-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .search-entry {
@@ -757,5 +780,10 @@ ul {
   .page-hero h1,
   .detail-header h1 {
     font-size: 2rem;
+  }
+
+  .meeting-grid,
+  .stat-grid {
+    grid-template-columns: 1fr;
   }
 }

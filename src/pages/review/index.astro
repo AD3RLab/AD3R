@@ -46,7 +46,6 @@ const projectBoard = projects
   .map((project) => ({
     id: project.id,
     name: project.name,
-    summary: project.summary,
     leaderName: memberMap[project.leaderId]?.name ?? "未设置",
     currentMilestone: project.roadmap.find((item) => item.status === "doing") ?? project.roadmap.find((item) => item.status === "todo"),
     latestUpdate: [...project.updates].sort((a, b) => +new Date(b.date) - +new Date(a.date))[0]
@@ -118,7 +117,7 @@ const recentFeed = [
     <article class="stat-card card"><strong>{reviewStats.recentItems}</strong><span>近期动态与更新</span></article>
   </section>
 
-  <section class="grid grid-sidebar section-panel" id="review-topics">
+  <section class="grid review-grid section-panel" id="review-topics">
     <article class="card">
       <SectionHeader
         title="课题总表"
@@ -126,7 +125,7 @@ const recentFeed = [
         linkHref={withBase("/topics/")}
         linkLabel="查看全部课题"
       />
-      <div class="table-wrap">
+      <div class="table-wrap scroll-panel">
         <table class="data-table">
           <thead>
             <tr>
@@ -161,7 +160,7 @@ const recentFeed = [
         linkHref={withBase("/topics/")}
         linkLabel="查看课题页"
       />
-      <div class="content-stack compact-stack">
+      <div class="content-stack compact-stack scroll-panel">
         {topicActions.map((item) => (
           <article class="action-card">
             <div class="card-heading split-wrap">
@@ -180,60 +179,26 @@ const recentFeed = [
   </section>
 
   <section class="section-panel" id="review-projects">
-    <SectionHeader title="项目推进看板" description="逐个项目查看负责人、当前里程碑和最近更新，适合组会快速过整体规划。" />
-    <div class="grid grid-3">
-      {projectBoard.map((project) => (
-        <article class="card focus-card">
-          <div class="card-heading split-wrap">
-            <h3>{project.name}</h3>
-            <a class="text-link" href={withBase(`/projects/${project.id}/`)}>查看详情</a>
-          </div>
-          <p>{project.summary}</p>
-          <p class="muted">负责人：{project.leaderName}</p>
-          {project.currentMilestone ? (
-            <>
-              <p><strong>当前里程碑：</strong>{project.currentMilestone.title}</p>
-              <div class="meta-list">
-                <span>{roadmapStatusLabels[project.currentMilestone.status]}</span>
-                <span>{project.currentMilestone.targetDate ? formatDate(project.currentMilestone.targetDate) : "时间待定"}</span>
-              </div>
-            </>
-          ) : (
-            <p class="muted">当前尚未设置里程碑。</p>
-          )}
-          {project.latestUpdate && (
-            <div class="focus-update">
-              <p class="muted">最近更新 · {formatDate(project.latestUpdate.date)}</p>
-              <p><strong>{project.latestUpdate.title}</strong></p>
-              <p>{project.latestUpdate.content}</p>
-            </div>
-          )}
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="section-panel section-panel-alt" id="review-milestones">
-    <SectionHeader title="近期里程碑" description="按目标时间排序，优先展示当前进行中和接下来需要推进的关键节点。" />
-    <div class="table-wrap card">
+    <SectionHeader title="项目推进总表" description="用紧凑视图浏览当前项目负责人、里程碑与最近更新，适合周会快速过一遍。"/>
+    <div class="table-wrap card scroll-panel tight">
       <table class="data-table">
         <thead>
           <tr>
             <th>项目</th>
-            <th>里程碑</th>
-            <th>状态</th>
             <th>负责人</th>
-            <th>目标时间</th>
+            <th>当前里程碑</th>
+            <th>状态</th>
+            <th>最近更新</th>
           </tr>
         </thead>
         <tbody>
-          {upcomingMilestones.slice(0, 10).map((item) => (
+          {projectBoard.map((project) => (
             <tr>
-              <td><a class="table-link" href={withBase(`/projects/${item.projectId}/`)}>{item.projectName}</a></td>
-              <td>{item.title}</td>
-              <td>{roadmapStatusLabels[item.status]}</td>
-              <td>{item.leaderName}</td>
-              <td>{item.targetDate ? formatDate(item.targetDate) : "待定"}</td>
+              <td><a class="table-link" href={withBase(`/projects/${project.id}/`)}>{project.name}</a></td>
+              <td>{project.leaderName}</td>
+              <td>{project.currentMilestone?.title ?? "待补充"}</td>
+              <td>{project.currentMilestone ? roadmapStatusLabels[project.currentMilestone.status] : "待定"}</td>
+              <td>{project.latestUpdate ? `${formatDate(project.latestUpdate.date)} · ${project.latestUpdate.title}` : "暂无更新"}</td>
             </tr>
           ))}
         </tbody>
@@ -241,21 +206,51 @@ const recentFeed = [
     </div>
   </section>
 
-  <section class="section-panel section-panel-alt" id="review-updates">
-    <SectionHeader title="近期动态与更新" description="用于会前快速回顾最近输出，避免遗漏阶段性更新。" />
-    <div class="timeline card">
-      {recentFeed.map((item) => (
-        <article class="timeline-item">
-          <div>
-            <span class="timeline-dot"></span>
-          </div>
-          <div>
-            <p class="muted">{item.type} · {formatDate(item.date)}</p>
-            <h3>{item.title}</h3>
-            <p>{item.summary}</p>
-          </div>
-        </article>
-      ))}
-    </div>
+  <section class="grid review-grid section-panel section-panel-alt">
+    <article id="review-milestones" class="card">
+      <SectionHeader title="近期里程碑" description="按目标时间排序，优先展示当前进行中和接下来需要推进的关键节点。" />
+      <div class="table-wrap scroll-panel tight">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>里程碑</th>
+              <th>状态</th>
+              <th>负责人</th>
+              <th>目标时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            {upcomingMilestones.slice(0, 10).map((item) => (
+              <tr>
+                <td><a class="table-link" href={withBase(`/projects/${item.projectId}/`)}>{item.projectName}</a></td>
+                <td>{item.title}</td>
+                <td>{roadmapStatusLabels[item.status]}</td>
+                <td>{item.leaderName}</td>
+                <td>{item.targetDate ? formatDate(item.targetDate) : "待定"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article id="review-updates" class="card">
+      <SectionHeader title="近期动态与更新" description="会前快速回顾最近输出和版本变化。" />
+      <div class="timeline scroll-panel tight">
+        {recentFeed.map((item) => (
+          <article class="timeline-item">
+            <div>
+              <span class="timeline-dot"></span>
+            </div>
+            <div>
+              <p class="muted">{item.type} · {formatDate(item.date)}</p>
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </article>
   </section>
 </Layout>
