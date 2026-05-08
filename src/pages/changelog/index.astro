@@ -1,0 +1,50 @@
+﻿---
+import { getCollection } from "astro:content";
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import { changelogTypeLabels, formatDate } from "../../utils/format";
+
+const entries = (await getCollection("changelog")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+const renderedEntries = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    rendered: await entry.render()
+  }))
+);
+---
+
+<Layout title="更新日志" description="查看团队网站和产品项目的版本更新记录。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">Changelog</p>
+    <h1>更新日志</h1>
+    <p>日志可由 Markdown 文件维护，适合沉淀产品迭代和团队门户自身的版本记录。</p>
+  </section>
+
+  <section>
+    <SectionHeader title="版本记录" description={`当前共 ${entries.length} 条更新日志`} />
+    <div class="content-stack">
+      {renderedEntries.map(({ entry, rendered }) => {
+        const Content = rendered.Content;
+        return (
+          <article class="card changelog-item">
+            <div class="card-heading split-wrap">
+              <div>
+                <h2>{entry.data.version}</h2>
+                <p>{entry.data.summary}</p>
+              </div>
+              <StatusBadge status={entry.data.type} label={changelogTypeLabels[entry.data.type]} />
+            </div>
+            <div class="meta-list">
+              <span>日期：{formatDate(entry.data.date)}</span>
+              <span>关联项目：{entry.data.project ?? "未设置"}</span>
+            </div>
+            <div class="prose compact-prose">
+              <Content />
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+</Layout>

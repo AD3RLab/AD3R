@@ -1,0 +1,21 @@
+---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import MemberCard from "../../components/MemberCard.astro";
+import { members } from "../../data/members";
+---
+
+<Layout title="团队成员" description="浏览 AD3R Lab 的成员构成、研究方向与代表成果。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">Members</p>
+    <h1>团队成员</h1>
+    <p>所有成员信息来自统一数据文件，后续只需维护 `src/data/members.ts` 和头像目录即可。</p>
+  </section>
+
+  <section>
+    <SectionHeader title="成员列表" description="按卡片形式展示姓名、角色、技术方向、链接与成果数量。" />
+    <div class="grid grid-3">
+      {members.map((member) => <MemberCard member={member} achievementCount={member.achievementIds.length} />)}
+    </div>
+  </section>
+</Layout>

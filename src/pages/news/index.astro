@@ -1,0 +1,23 @@
+﻿---
+import { getCollection } from "astro:content";
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import NewsCard from "../../components/NewsCard.astro";
+
+const newsEntries = (await getCollection("news")).sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date));
+---
+
+<Layout title="团队动态" description="浏览团队新闻、动态、周报和技术文章。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">News</p>
+    <h1>动态 / 新闻</h1>
+    <p>新闻内容使用 Astro Content Collections 管理，后续只需新增 Markdown 文件即可。</p>
+  </section>
+
+  <section>
+    <SectionHeader title="全部动态" description={`当前共 ${newsEntries.length} 篇内容`} />
+    <div class="grid grid-2">
+      {newsEntries.map((entry) => <NewsCard entry={entry} />)}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,105 @@
+﻿---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import AchievementCard from "../../components/AchievementCard.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import Badge from "../../components/Badge.astro";
+import { members } from "../../data/members";
+import { projects } from "../../data/projects";
+import { achievements } from "../../data/achievements";
+import { withBase } from "../../utils/links";
+
+export function getStaticPaths() {
+  return members.map((member) => ({
+    params: { id: member.id },
+    props: { member }
+  }));
+}
+
+const { member } = Astro.props;
+const memberMap = Object.fromEntries(members.map((item) => [item.id, item]));
+const relatedProjects = projects.filter((project) => project.memberIds.includes(member.id) || project.leaderId === member.id);
+const relatedAchievements = achievements.filter((achievement) => achievement.memberIds.includes(member.id));
+const publications = relatedAchievements.filter((achievement) => ["paper", "article", "report"].includes(achievement.type));
+---
+
+<Layout title={member.name} description={member.bio} image={member.avatar}>
+  <section class="detail-header card">
+    <img src={withBase(member.avatar)} alt={`${member.name} 头像`} class="detail-avatar" />
+    <div>
+      <p class="section-eyebrow">Member Profile</p>
+      <h1>{member.name}</h1>
+      <p class="detail-subtitle">{member.role}{member.title ? `  ${member.title}` : ""}</p>
+      <p>{member.bio}</p>
+      <div class="tag-row">
+        {member.researchAreas.map((area) => <Badge label={area} variant="primary" />)}
+      </div>
+      <div class="tag-row compact">
+        {member.skills.map((skill) => <span class="text-chip">{skill}</span>)}
+      </div>
+      <div class="action-row">
+        {member.github && <a class="button ghost" href={member.github} target="_blank" rel="noreferrer">GitHub</a>}
+        {member.gitee && <a class="button ghost" href={member.gitee} target="_blank" rel="noreferrer">Gitee</a>}
+        {member.homepage && <a class="button ghost" href={member.homepage} target="_blank" rel="noreferrer">个人主页</a>}
+        {member.email && <a class="button ghost" href={`mailto:${member.email}`}>邮箱</a>}
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-sidebar">
+    <div class="content-stack">
+      <article class="card">
+        <SectionHeader title="成员简介" />
+        <p>{member.bio}</p>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="参与项目" />
+        <div class="grid grid-2">
+          {relatedProjects.map((project) => (
+            <ProjectCard
+              project={project}
+              leaderName={memberMap[project.leaderId]?.name ?? "未设置"}
+              memberNames={project.memberIds.map((id) => memberMap[id]?.name ?? id)}
+            />
+          ))}
+        </div>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="个人成果列表" description="自动根据成员 ID 关联成果，无需在页面层硬编码。" />
+        <div class="grid grid-2">
+          {relatedAchievements.map((achievement) => <AchievementCard achievement={achievement} />)}
+        </div>
+      </article>
+    </div>
+
+    <aside class="detail-sidebar">
+      <article class="card">
+        <SectionHeader title="技术方向" />
+        <ul class="detail-list">
+          {member.researchAreas.map((area) => <li>{area}</li>)}
+        </ul>
+      </article>
+      <article class="card">
+        <SectionHeader title="发表文章" />
+        <ul class="detail-list">
+          {publications.map((item) => (
+            <li>
+              <a href={item.url ?? withBase("/achievements/")} target={item.url ? "_blank" : undefined} rel="noreferrer">{item.title}</a>
+            </li>
+          ))}
+        </ul>
+      </article>
+      <article class="card">
+        <SectionHeader title="相关链接" />
+        <ul class="detail-list">
+          {member.github && <li><a href={member.github} target="_blank" rel="noreferrer">GitHub</a></li>}
+          {member.gitee && <li><a href={member.gitee} target="_blank" rel="noreferrer">Gitee</a></li>}
+          {member.homepage && <li><a href={member.homepage} target="_blank" rel="noreferrer">个人主页</a></li>}
+          {member.email && <li><a href={`mailto:${member.email}`}>邮箱</a></li>}
+        </ul>
+      </article>
+    </aside>
+  </section>
+</Layout>

@@ -1,0 +1,40 @@
+---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import AchievementCard from "../../components/AchievementCard.astro";
+import { achievements } from "../../data/achievements";
+import { achievementTypeLabels } from "../../utils/format";
+
+const types = ["paper", "patent", "software", "open-source", "article", "award", "demo", "report"] as const;
+const stats = types.map((type) => ({ type, count: achievements.filter((item) => item.type === type).length }));
+---
+
+<Layout title="团队成果" description="浏览 AD3R 在 3D 场景重建、导出渲染、动态建模与场景资产化方向上的阶段性成果。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">Achievements</p>
+    <h1>成果展示</h1>
+    <p>页面按成果类型进行静态分组展示，便于持续维护论文、报告、软件原型、专利与演示内容。</p>
+  </section>
+
+  <section class="stat-grid">
+    {stats.map((item) => (
+      <article class="stat-card card">
+        <strong>{item.count}</strong>
+        <span>{achievementTypeLabels[item.type]}</span>
+      </article>
+    ))}
+  </section>
+
+  <section class="anchor-row card">
+    {types.map((type) => <a class="text-chip large" href={`#${type}`}>{achievementTypeLabels[type]}</a>)}
+  </section>
+
+  {types.map((type) => (
+    <section id={type}>
+      <SectionHeader title={achievementTypeLabels[type]} description={`共 ${achievements.filter((item) => item.type === type).length} 条`} />
+      <div class="grid grid-2">
+        {achievements.filter((item) => item.type === type).map((achievement) => <AchievementCard achievement={achievement} />)}
+      </div>
+    </section>
+  ))}
+</Layout>

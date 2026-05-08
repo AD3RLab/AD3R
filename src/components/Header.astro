@@ -1,0 +1,35 @@
+﻿---
+import { siteConfig } from "../data/site";
+import { withBase } from "../utils/links";
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+const currentPath = Astro.url.pathname.startsWith(basePath)
+  ? Astro.url.pathname.slice(basePath.length) || "/"
+  : Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container nav-shell">
+    <a class="brand" href={withBase("/")}>
+      <span class="brand-mark">AD</span>
+      <span>
+        <strong>{siteConfig.name}</strong>
+        <small>{siteConfig.englishName}</small>
+      </span>
+    </a>
+
+    <nav class="nav-links" aria-label="主导航">
+      {siteConfig.nav.map((item) => {
+        const active = currentPath === item.href || currentPath.startsWith(item.href === "/" ? "/_never" : item.href);
+        return (
+          <a class={active ? "is-active" : undefined} href={withBase(item.href)}>{item.label}</a>
+        );
+      })}
+    </nav>
+
+    <label class="search-entry" aria-label="搜索入口">
+      <span>搜索</span>
+      <input type="text" placeholder="搜索入口即将支持" disabled />
+    </label>
+  </div>
+</header>

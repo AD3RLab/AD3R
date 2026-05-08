@@ -1,0 +1,43 @@
+---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { projects } from "../../data/projects";
+import { members } from "../../data/members";
+
+const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
+const statusStats = {
+  planning: projects.filter((project) => project.status === "planning").length,
+  active: projects.filter((project) => project.status === "active").length,
+  maintenance: projects.filter((project) => project.status === "maintenance").length,
+  archived: projects.filter((project) => project.status === "archived").length
+};
+---
+
+<Layout title="团队项目" description="浏览 AD3R 当前正在推进的 3D 场景重建、导出渲染与动态资产化项目。">
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">Projects</p>
+    <h1>项目 / 产品</h1>
+    <p>聚焦项目状态、技术栈、版本、负责人和持续更新节奏，展示团队面向自动驾驶场景资产化的核心建设方向。</p>
+  </section>
+
+  <section class="stat-grid">
+    <article class="stat-card card"><strong>{statusStats.planning}</strong><span>规划中</span></article>
+    <article class="stat-card card"><strong>{statusStats.active}</strong><span>进行中</span></article>
+    <article class="stat-card card"><strong>{statusStats.maintenance}</strong><span>维护中</span></article>
+    <article class="stat-card card"><strong>{statusStats.archived}</strong><span>已归档</span></article>
+  </section>
+
+  <section>
+    <SectionHeader title="项目列表" description="项目卡片展示状态、版本、负责人、相关成员与最近更新时间，便于持续对外同步研发进展。" />
+    <div class="grid grid-2">
+      {projects.map((project) => (
+        <ProjectCard
+          project={project}
+          leaderName={memberMap[project.leaderId]?.name ?? "未设置"}
+          memberNames={project.memberIds.map((id) => memberMap[id]?.name ?? id)}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

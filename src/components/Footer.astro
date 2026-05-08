@@ -1,0 +1,31 @@
+---
+import { siteConfig } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>{siteConfig.name}</h3>
+      <p>{siteConfig.description}</p>
+    </div>
+    <div>
+      <h4>联系方式</h4>
+      <ul class="footer-list">
+        <li><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></li>
+        {siteConfig.github && <li><a href={siteConfig.github} target="_blank" rel="noreferrer">GitHub</a></li>}
+        {siteConfig.gitee && <li><a href={siteConfig.gitee} target="_blank" rel="noreferrer">Gitee</a></li>}
+      </ul>
+    </div>
+    <div>
+      <h4>组织信息</h4>
+      <ul class="footer-list">
+        <li>{siteConfig.location}</li>
+        <li>{siteConfig.address}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>Copyright 2026 {siteConfig.name}. All rights reserved.</span>
+    <span>Built with Astro + TypeScript + Markdown/MDX</span>
+  </div>
+</footer>

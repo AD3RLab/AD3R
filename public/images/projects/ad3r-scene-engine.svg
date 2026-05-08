@@ -1,0 +1,18 @@
+﻿<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" rx="36" fill="#F8FAFC"/>
+  <rect x="40" y="40" width="1120" height="595" rx="28" fill="url(#paint0_linear)"/>
+  <rect x="96" y="120" width="360" height="24" rx="12" fill="rgba(255,255,255,0.65)"/>
+  <rect x="96" y="168" width="250" height="16" rx="8" fill="rgba(255,255,255,0.38)"/>
+  <rect x="96" y="244" width="402" height="260" rx="28" fill="rgba(255,255,255,0.14)"/>
+  <rect x="534" y="244" width="210" height="120" rx="24" fill="rgba(255,255,255,0.16)"/>
+  <rect x="534" y="384" width="210" height="120" rx="24" fill="rgba(255,255,255,0.16)"/>
+  <rect x="772" y="244" width="332" height="260" rx="28" fill="rgba(255,255,255,0.12)"/>
+  <text x="96" y="582" fill="white" font-size="56" font-family="Arial, sans-serif" font-weight="700">Aurora Platform</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="40" y1="40" x2="1160" y2="635" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.5" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+</svg>

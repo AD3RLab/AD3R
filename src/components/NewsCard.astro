@@ -1,0 +1,29 @@
+﻿---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../utils/format";
+import { withBase } from "../utils/links";
+
+interface Props {
+  entry: CollectionEntry<"news">;
+}
+
+const { entry } = Astro.props;
+---
+
+<article class="card news-card">
+  <div class="card-heading">
+    <div>
+      <h3>
+        <a href={withBase(`/news/${entry.slug}/`)}>{entry.data.title}</a>
+      </h3>
+      <p>{entry.data.summary}</p>
+    </div>
+  </div>
+  <div class="meta-list">
+    <span>日期：{formatDate(entry.data.date)}</span>
+    <span>作者：{entry.data.author}</span>
+  </div>
+  <div class="tag-row compact">
+    {entry.data.tags.map((tag) => <span class="text-chip">{tag}</span>)}
+  </div>
+</article>

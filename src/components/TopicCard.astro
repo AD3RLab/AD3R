@@ -1,0 +1,29 @@
+﻿---
+import type { ResearchTopic } from "../data/researchTopics";
+import StatusBadge from "./StatusBadge.astro";
+import Badge from "./Badge.astro";
+import { topicStatusLabels, formatDate } from "../utils/format";
+
+interface Props {
+  topic: ResearchTopic;
+  memberNames: string[];
+}
+
+const { topic, memberNames } = Astro.props;
+---
+
+<article class="card topic-card">
+  <div class="card-heading split-wrap">
+    <h3>{topic.title}</h3>
+    <StatusBadge status={topic.status} label={topicStatusLabels[topic.status]} />
+  </div>
+  <p>{topic.background}</p>
+  <div class="meta-list">
+    <span>相关成员：{memberNames.join(" / ")}</span>
+    <span>最近更新：{formatDate(topic.updatedAt)}</span>
+  </div>
+  <p class="muted">最近进展：{topic.progress}</p>
+  <div class="tag-row compact">
+    {topic.keywords.map((keyword) => <Badge label={keyword} />)}
+  </div>
+</article>

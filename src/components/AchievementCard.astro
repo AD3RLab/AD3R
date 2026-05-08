@@ -1,0 +1,31 @@
+﻿---
+import type { Achievement } from "../data/achievements";
+import Badge from "./Badge.astro";
+import { achievementTypeLabels, formatDate } from "../utils/format";
+
+interface Props {
+  achievement: Achievement;
+}
+
+const { achievement } = Astro.props;
+---
+
+<article class="card achievement-card">
+  <div class="card-heading split-wrap">
+    <h3>{achievement.title}</h3>
+    <Badge label={achievementTypeLabels[achievement.type]} variant="primary" />
+  </div>
+  <p>{achievement.summary}</p>
+  <div class="meta-list">
+    <span>作者：{achievement.authors.join(" / ")}</span>
+    <span>日期：{formatDate(achievement.date)}</span>
+  </div>
+  <div class="tag-row compact">
+    {achievement.tags.map((tag) => <span class="text-chip">{tag}</span>)}
+  </div>
+  {achievement.url && (
+    <p>
+      <a class="text-link" href={achievement.url} target="_blank" rel="noreferrer">查看链接</a>
+    </p>
+  )}
+</article>

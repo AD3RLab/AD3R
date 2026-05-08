@@ -1,0 +1,39 @@
+---
+import type { Member } from "../data/members";
+import Badge from "./Badge.astro";
+import { withBase } from "../utils/links";
+
+interface Props {
+  member: Member;
+  achievementCount: number;
+}
+
+const { member, achievementCount } = Astro.props;
+---
+
+<article class="card member-card">
+  <img src={withBase(member.avatar)} alt={`${member.name} 头像`} class="avatar" loading="lazy" />
+  <div class="member-card-body">
+    <div class="card-heading">
+      <div>
+        <h3><a href={withBase(`/members/${member.id}/`)}>{member.name}</a></h3>
+        <p>{member.role}</p>
+      </div>
+      <Badge label={`${achievementCount} 项成果`} variant="primary" />
+    </div>
+    {member.title && <p class="muted">{member.title}</p>}
+    <p>{member.bio}</p>
+    <div class="tag-row">
+      {member.researchAreas.slice(0, 3).map((area) => <Badge label={area} />)}
+    </div>
+    <div class="tag-row compact">
+      {member.skills.slice(0, 4).map((skill) => <span class="text-chip">{skill}</span>)}
+    </div>
+    <div class="link-row">
+      {member.github && <a class="text-link" href={member.github} target="_blank" rel="noreferrer">GitHub</a>}
+      {member.gitee && <a class="text-link" href={member.gitee} target="_blank" rel="noreferrer">Gitee</a>}
+      {member.homepage && <a class="text-link" href={member.homepage} target="_blank" rel="noreferrer">主页</a>}
+      {member.email && <a class="text-link" href={`mailto:${member.email}`}>邮箱</a>}
+    </div>
+  </div>
+</article>

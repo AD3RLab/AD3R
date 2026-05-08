@@ -1,0 +1,72 @@
+---
+import Layout from "../components/Layout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import { siteConfig } from "../data/site";
+---
+
+<Layout title="关于团队" description={siteConfig.description}>
+  <section class="page-hero card surface-gradient">
+    <p class="section-eyebrow">About</p>
+    <h1>关于我们</h1>
+    <p>{siteConfig.description}</p>
+  </section>
+
+  <section class="grid grid-2">
+    <article class="card">
+      <SectionHeader title="团队介绍" />
+      <p>{siteConfig.mission}</p>
+    </article>
+    <article class="card">
+      <SectionHeader title="定位与愿景" />
+      <p>{siteConfig.positioning}</p>
+      <p class="muted">{siteConfig.vision}</p>
+    </article>
+  </section>
+
+  <section class="card">
+    <SectionHeader title="核心能力" description="以下能力描述统一维护在 `src/data/site.ts`，便于后续持续更新官网表达。" />
+    <div class="grid grid-2">
+      {siteConfig.capabilities.map((item) => (
+        <article class="card">
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="grid grid-2">
+    <article class="card">
+      <SectionHeader title="联系方式" />
+      <ul class="detail-list">
+        <li>邮箱：<a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></li>
+        {siteConfig.github && <li>GitHub：<a href={siteConfig.github} target="_blank" rel="noreferrer">{siteConfig.github}</a></li>}
+        {siteConfig.gitee && <li>Gitee：<a href={siteConfig.gitee} target="_blank" rel="noreferrer">{siteConfig.gitee}</a></li>}
+      </ul>
+    </article>
+    <article class="card">
+      <SectionHeader title="加入我们" />
+      <p>{siteConfig.joinUs}</p>
+    </article>
+  </section>
+
+  <section class="card">
+    <SectionHeader title="组织信息" />
+    <div class="info-grid">
+      <div>
+        <h3>团队名称</h3>
+        <p>{siteConfig.name}</p>
+        <p class="muted">{siteConfig.englishName}</p>
+      </div>
+      <div>
+        <h3>团队定位</h3>
+        <p>{siteConfig.location}</p>
+        <p class="muted">{siteConfig.address}</p>
+      </div>
+      <div>
+        <h3>核心方向</h3>
+        <p>{siteConfig.researchDirections.join(" / ")}</p>
+      </div>
+    </div>
+  </section>
+</Layout>

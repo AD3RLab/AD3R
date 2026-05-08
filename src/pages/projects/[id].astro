@@ -1,0 +1,133 @@
+﻿---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import AchievementCard from "../../components/AchievementCard.astro";
+import Badge from "../../components/Badge.astro";
+import { projects } from "../../data/projects";
+import { members } from "../../data/members";
+import { achievements } from "../../data/achievements";
+import { projectStatusLabels, roadmapStatusLabels, formatDate } from "../../utils/format";
+import { withBase } from "../../utils/links";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
+const relatedMembers = members.filter((member) => project.memberIds.includes(member.id) || project.leaderId === member.id);
+const relatedAchievements = achievements.filter((achievement) => (achievement.projectIds ?? []).includes(project.id));
+---
+
+<Layout title={project.name} description={project.summary} image={project.cover}>
+  <section class="detail-header card">
+    <img src={withBase(project.cover ?? "/images/projects/aurora-platform.svg")} alt={`${project.name} 封面`} class="detail-cover" />
+    <div>
+      <p class="section-eyebrow">Project Detail</p>
+      <h1>{project.name}</h1>
+      <div class="action-row compact">
+        <StatusBadge status={project.status} label={projectStatusLabels[project.status]} />
+        {project.version && <Badge label={project.version} variant="primary" />}
+      </div>
+      <p>{project.description}</p>
+      <div class="meta-list detail-meta">
+        <span>负责人：{memberMap[project.leaderId]?.name ?? "未设置"}</span>
+        <span>最近更新：{formatDate(project.updatedAt)}</span>
+        <span>成员：{relatedMembers.map((member) => member.name).join(" / ")}</span>
+      </div>
+      <div class="tag-row compact">
+        {project.techStack.map((item) => <span class="text-chip">{item}</span>)}
+      </div>
+      <div class="action-row">
+        {project.repoUrl && <a class="button" href={project.repoUrl} target="_blank" rel="noreferrer">仓库链接</a>}
+        {project.demoUrl && <a class="button ghost" href={project.demoUrl} target="_blank" rel="noreferrer">Demo 链接</a>}
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-sidebar">
+    <div class="content-stack">
+      <article class="card">
+        <SectionHeader title="功能特性" />
+        <ul class="detail-list">
+          {project.features.map((feature) => <li>{feature}</li>)}
+        </ul>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="产品截图区域" description="当前使用占位图，后续可直接替换 `public/images/projects/` 下的文件。" />
+        <div class="screenshot-grid">
+          <img src={withBase(project.cover ?? "/images/projects/aurora-platform.svg")} alt={`${project.name} 截图 1`} class="detail-cover" />
+          <img src={withBase(project.cover ?? "/images/projects/aurora-platform.svg")} alt={`${project.name} 截图 2`} class="detail-cover" />
+        </div>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="Roadmap" />
+        <div class="timeline">
+          {project.roadmap.map((item) => (
+            <article class="timeline-item compact">
+              <div><span class="timeline-dot"></span></div>
+              <div>
+                <p class="muted">目标时间：{item.targetDate ? formatDate(item.targetDate) : "待定"}</p>
+                <h3>{item.title}</h3>
+                <StatusBadge status={item.status} label={roadmapStatusLabels[item.status]} />
+              </div>
+            </article>
+          ))}
+        </div>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="最近更新记录" />
+        <div class="timeline">
+          {project.updates.map((item) => (
+            <article class="timeline-item compact">
+              <div><span class="timeline-dot"></span></div>
+              <div>
+                <p class="muted">{formatDate(item.date)}</p>
+                <h3>{item.title}</h3>
+                <p>{item.content}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="相关成果" />
+        <div class="grid grid-2">
+          {relatedAchievements.map((achievement) => <AchievementCard achievement={achievement} />)}
+        </div>
+      </article>
+    </div>
+
+    <aside class="detail-sidebar">
+      <article class="card">
+        <SectionHeader title="相关成员" />
+        <div class="related-people">
+          {relatedMembers.map((member) => (
+            <a class="person-row" href={withBase(`/members/${member.id}/`)}>
+              <img src={withBase(member.avatar)} alt={`${member.name} 头像`} class="person-avatar" />
+              <div>
+                <strong>{member.name}</strong>
+                <p>{member.role}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </article>
+      <article class="card">
+        <SectionHeader title="项目链接" />
+        <ul class="detail-list">
+          {project.repoUrl && <li><a href={project.repoUrl} target="_blank" rel="noreferrer">仓库地址</a></li>}
+          {project.demoUrl && <li><a href={project.demoUrl} target="_blank" rel="noreferrer">Demo 地址</a></li>}
+        </ul>
+      </article>
+    </aside>
+  </section>
+</Layout>
