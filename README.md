@@ -4,6 +4,7 @@ AD3R，全称 `Autonomous Driving 3D Reconstruction Lab`，是一个面向自动
 
 当前仓库地址：
 
+- GitHub：`https://github.com/AD3RLab/AD3R`
 - Gitee：`https://gitee.com/rec-any-thing/ad3-r`
 
 ## 技术栈
@@ -94,14 +95,14 @@ npm run dev
 3. 打开浏览器访问
 
 ```text
-http://localhost:4321/ad3-r/
+http://localhost:4321/AD3R/
 ```
 
-当前 `astro.config.mjs` 已按 Gitee Pages 子路径配置：
+当前 `astro.config.mjs` 已按 GitHub Pages 子路径配置：
 
 ```js
-site: "https://rec-any-thing.gitee.io",
-base: "/ad3-r"
+site: "https://ad3rlab.github.io",
+base: "/AD3R"
 ```
 
 如果你改为根路径部署，请把 `base` 改成 `/`。
@@ -235,17 +236,17 @@ summary: "初始化 AD3R 团队主页。"
 
 ## GitHub Pages 部署
 
-如果你需要部署到 GitHub Pages，请修改 `astro.config.mjs` 中的：
+当前项目已经按 GitHub Pages 配置完成：
 
 ```js
-site: "https://your-org.github.io",
-base: "/your-repo"
+site: "https://ad3rlab.github.io",
+base: "/AD3R"
 ```
 
-适用地址格式：
+预计部署地址：
 
 ```text
-https://组织名.github.io/仓库名/
+https://ad3rlab.github.io/AD3R/
 ```
 
 仓库中已经提供 GitHub Actions 工作流：
@@ -260,9 +261,9 @@ https://组织名.github.io/仓库名/
 
 ## Gitee Pages 部署
 
-当前项目默认就是按 Gitee Pages 子路径部署配置的。
+如果你仍然想保留 Gitee 或迁移到其他静态托管，也只需要修改 `astro.config.mjs` 中的 `site` 和 `base`。
 
-### 当前默认配置
+### Gitee 示例配置
 
 ```js
 site: "https://rec-any-thing.gitee.io",
@@ -316,7 +317,7 @@ base: "/"
 因为当前默认配置了：
 
 ```js
-base: "/ad3-r"
+base: "/AD3R"
 ```
 
 这是为了和 Gitee Pages 子路径保持一致。

@@ -4,7 +4,7 @@ export const siteConfig = {
   englishName: "Autonomous Driving 3D Reconstruction Lab",
   description:
     "AD3R Lab 是一个面向自动驾驶与具身智能场景的三维重建研发组织，专注于将真实世界采集数据转化为可重建、可编辑、可渲染、可仿真、可评测的高价值 3D 场景资产。",
-  github: "",
+  github: "https://github.com/AD3RLab/AD3R",
   gitee: "https://gitee.com/rec-any-thing/ad3-r",
   email: "contact@kotei.com.cn",
   location: "面向自动驾驶真实世界数据的 3D 场景资产化技术团队",

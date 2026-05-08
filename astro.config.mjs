@@ -2,9 +2,9 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 
 export default defineConfig({
-  // Update these values if you deploy to a root domain or Gitee Pages.
-  site: "https://rec-any-thing.gitee.io",
-  base: "/ad3-r",
+  // Update these values if you deploy to a root domain, custom domain, or other hosting.
+  site: "https://ad3rlab.github.io",
+  base: "/AD3R",
   output: "static",
   trailingSlash: "always",
   integrations: [mdx()],
