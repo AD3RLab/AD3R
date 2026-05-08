@@ -5,10 +5,21 @@ import TopicCard from "../../components/TopicCard.astro";
 import EmptyState from "../../components/EmptyState.astro";
 import { researchTopics } from "../../data/researchTopics";
 import { members } from "../../data/members";
-import { topicStatusLabels } from "../../utils/format";
+import { formatDate, topicStatusLabels } from "../../utils/format";
 
 const statuses = ["tracking", "researching", "validating", "completed", "paused"] as const;
 const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
+const topicActions = researchTopics
+  .filter((topic) => ["tracking", "researching", "validating"].includes(topic.status))
+  .flatMap((topic) =>
+    topic.nextSteps.map((step) => ({
+      title: topic.title,
+      step,
+      status: topic.status,
+      updatedAt: topic.updatedAt
+    }))
+  )
+  .slice(0, 8);
 ---
 
 <Layout title="课题追踪" description="展示 AD3R 当前正在追踪、研究、验证、完成或暂停的关键课题。">
@@ -25,6 +36,22 @@ const memberMap = Object.fromEntries(members.map((member) => [member.id, member]
         <span>{topicStatusLabels[status]}</span>
       </article>
     ))}
+  </section>
+
+  <section>
+    <SectionHeader title="下一步行动清单" description="把正在追踪、研究和验证中的课题动作项拉平，方便组会逐条过确认。" />
+    <div class="grid grid-2">
+      {topicActions.map((item) => (
+        <article class="card action-card">
+          <div class="card-heading split-wrap">
+            <h3>{item.title}</h3>
+            <span class="text-chip">{topicStatusLabels[item.status]}</span>
+          </div>
+          <p>{item.step}</p>
+          <p class="muted">最近更新时间：{formatDate(item.updatedAt)}</p>
+        </article>
+      ))}
+    </div>
   </section>
 
   {statuses.map((status) => {

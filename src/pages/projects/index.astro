@@ -4,6 +4,7 @@ import SectionHeader from "../../components/SectionHeader.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { projects } from "../../data/projects";
 import { members } from "../../data/members";
+import { formatDate } from "../../utils/format";
 
 const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
 const statusStats = {
@@ -12,6 +13,17 @@ const statusStats = {
   maintenance: projects.filter((project) => project.status === "maintenance").length,
   archived: projects.filter((project) => project.status === "archived").length
 };
+const roadmapStatusLabels = {
+  todo: "待启动",
+  doing: "进行中",
+  done: "已完成"
+} as const;
+const projectBoard = projects.map((project) => ({
+  ...project,
+  leaderName: memberMap[project.leaderId]?.name ?? "未设置",
+  currentMilestone: project.roadmap.find((item) => item.status === "doing") ?? project.roadmap.find((item) => item.status === "todo"),
+  latestUpdate: [...project.updates].sort((a, b) => +new Date(b.date) - +new Date(a.date))[0]
+}));
 ---
 
 <Layout title="团队项目" description="浏览 AD3R 当前正在推进的 3D 场景重建、导出渲染与动态资产化项目。">
@@ -26,6 +38,39 @@ const statusStats = {
     <article class="stat-card card"><strong>{statusStats.active}</strong><span>进行中</span></article>
     <article class="stat-card card"><strong>{statusStats.maintenance}</strong><span>维护中</span></article>
     <article class="stat-card card"><strong>{statusStats.archived}</strong><span>已归档</span></article>
+  </section>
+
+  <section>
+    <SectionHeader title="项目推进看板" description="适合组会时逐项过项目，快速确认当前里程碑、最近更新与下一步节奏。" />
+    <div class="grid grid-3">
+      {projectBoard.map((project) => (
+        <article class="card focus-card">
+          <div class="card-heading split-wrap">
+            <h3>{project.name}</h3>
+            <span class="text-chip">{project.leaderName}</span>
+          </div>
+          <p>{project.summary}</p>
+          {project.currentMilestone ? (
+            <>
+              <p><strong>当前里程碑：</strong>{project.currentMilestone.title}</p>
+              <div class="meta-list">
+                <span>{roadmapStatusLabels[project.currentMilestone.status]}</span>
+                <span>{project.currentMilestone.targetDate ? formatDate(project.currentMilestone.targetDate) : "时间待定"}</span>
+              </div>
+            </>
+          ) : (
+            <p class="muted">暂无进行中或待启动里程碑。</p>
+          )}
+          {project.latestUpdate && (
+            <div class="focus-update">
+              <p class="muted">最近更新 · {formatDate(project.latestUpdate.date)}</p>
+              <p><strong>{project.latestUpdate.title}</strong></p>
+              <p>{project.latestUpdate.content}</p>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
   </section>
 
   <section>
