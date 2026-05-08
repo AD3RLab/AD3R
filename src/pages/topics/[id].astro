@@ -2,11 +2,12 @@
 import Layout from "../../components/Layout.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
+import Badge from "../../components/Badge.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { researchTopics } from "../../data/researchTopics";
 import { members } from "../../data/members";
 import { projects } from "../../data/projects";
-import { topicStatusLabels, formatDate } from "../../utils/format";
+import { topicPriorityLabels, topicStatusLabels, formatDate } from "../../utils/format";
 import { withBase } from "../../utils/links";
 
 export function getStaticPaths() {
@@ -28,6 +29,7 @@ const relatedProjects = projects.filter((project) => (topic.projectIds ?? []).in
       <p class="section-eyebrow">Topic Detail</p>
       <h1>{topic.title}</h1>
       <div class="action-row compact">
+        <Badge label={`${topicPriorityLabels[topic.priority]}优先级`} variant="primary" />
         <StatusBadge status={topic.status} label={topicStatusLabels[topic.status]} />
       </div>
       <p>{topic.background}</p>
@@ -101,6 +103,7 @@ const relatedProjects = projects.filter((project) => (topic.projectIds ?? []).in
       <article class="card">
         <SectionHeader title="状态摘要" />
         <ul class="detail-list">
+          <li>优先级：{topicPriorityLabels[topic.priority]}</li>
           <li>状态：{topicStatusLabels[topic.status]}</li>
           <li>更新时间：{formatDate(topic.updatedAt)}</li>
           <li>关键词：{topic.keywords.join(" / ")}</li>

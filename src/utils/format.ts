@@ -1,4 +1,4 @@
-﻿export const achievementTypeLabels = {
+export const achievementTypeLabels = {
   paper: "论文",
   patent: "专利",
   software: "软件",
@@ -22,6 +22,13 @@ export const topicStatusLabels = {
   validating: "验证中",
   completed: "已完成",
   paused: "已暂停"
+} as const;
+
+export const topicPriorityLabels = {
+  urgent: "紧急",
+  high: "高",
+  medium: "中",
+  low: "低"
 } as const;
 
 export const roadmapStatusLabels = {
