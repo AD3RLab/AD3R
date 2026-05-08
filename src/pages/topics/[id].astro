@@ -1,0 +1,111 @@
+---
+import Layout from "../../components/Layout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import StatusBadge from "../../components/StatusBadge.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { researchTopics } from "../../data/researchTopics";
+import { members } from "../../data/members";
+import { projects } from "../../data/projects";
+import { topicStatusLabels, formatDate } from "../../utils/format";
+import { withBase } from "../../utils/links";
+
+export function getStaticPaths() {
+  return researchTopics.map((topic) => ({
+    params: { id: topic.id },
+    props: { topic }
+  }));
+}
+
+const { topic } = Astro.props;
+const memberMap = Object.fromEntries(members.map((member) => [member.id, member]));
+const relatedMembers = members.filter((member) => topic.memberIds.includes(member.id));
+const relatedProjects = projects.filter((project) => (topic.projectIds ?? []).includes(project.id));
+---
+
+<Layout title={topic.title} description={topic.progress}>
+  <section class="detail-header card">
+    <div>
+      <p class="section-eyebrow">Topic Detail</p>
+      <h1>{topic.title}</h1>
+      <div class="action-row compact">
+        <StatusBadge status={topic.status} label={topicStatusLabels[topic.status]} />
+      </div>
+      <p>{topic.background}</p>
+      <div class="meta-list detail-meta">
+        <span>最近更新：{formatDate(topic.updatedAt)}</span>
+        <span>相关成员：{relatedMembers.map((member) => member.name).join(" / ")}</span>
+      </div>
+      <div class="tag-row compact">
+        {topic.keywords.map((keyword) => <span class="text-chip">{keyword}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-sidebar">
+    <div class="content-stack">
+      <article class="card">
+        <SectionHeader title="研究背景" />
+        <p>{topic.background}</p>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="当前进展" />
+        <p>{topic.progress}</p>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="研究目标" />
+        <ul class="detail-list">
+          {topic.goals.map((goal) => <li>{goal}</li>)}
+        </ul>
+      </article>
+
+      <article class="card">
+        <SectionHeader title="下一步计划" />
+        <ul class="detail-list">
+          {topic.nextSteps.map((step) => <li>{step}</li>)}
+        </ul>
+      </article>
+
+      {relatedProjects.length > 0 && (
+        <article class="card">
+          <SectionHeader title="关联项目" />
+          <div class="grid grid-2">
+            {relatedProjects.map((project) => (
+              <ProjectCard
+                project={project}
+                leaderName={memberMap[project.leaderId]?.name ?? "未设置"}
+                memberNames={project.memberIds.map((id) => memberMap[id]?.name ?? id)}
+              />
+            ))}
+          </div>
+        </article>
+      )}
+    </div>
+
+    <aside class="detail-sidebar">
+      <article class="card">
+        <SectionHeader title="相关成员" />
+        <div class="related-people">
+          {relatedMembers.map((member) => (
+            <a class="person-row" href={withBase(`/members/${member.id}/`)}>
+              <img src={withBase(member.avatar)} alt={`${member.name} 头像`} class="person-avatar" />
+              <div>
+                <strong>{member.name}</strong>
+                <p>{member.role}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </article>
+      <article class="card">
+        <SectionHeader title="状态摘要" />
+        <ul class="detail-list">
+          <li>状态：{topicStatusLabels[topic.status]}</li>
+          <li>更新时间：{formatDate(topic.updatedAt)}</li>
+          <li>关键词：{topic.keywords.join(" / ")}</li>
+        </ul>
+      </article>
+    </aside>
+  </section>
+</Layout>

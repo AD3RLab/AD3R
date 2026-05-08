@@ -1,0 +1,42 @@
+---
+import type { ShowcaseMedia } from "../data/media";
+import { formatDate } from "../utils/format";
+import { withBase } from "../utils/links";
+
+interface Props {
+  items: ShowcaseMedia[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="showcase-grid">
+  {items.map((item) => (
+    <article class="card showcase-card">
+      {item.kind === "image" ? (
+        <img src={withBase(item.src)} alt={item.title} class="showcase-media" loading="lazy" />
+      ) : (
+        <video
+          class="showcase-media"
+          controls
+          preload="metadata"
+          poster={item.thumbnail ? withBase(item.thumbnail) : undefined}
+        >
+          <source src={withBase(item.src)} />
+        </video>
+      )}
+      <div class="showcase-body">
+        <div class="card-heading split-wrap">
+          <h3>{item.title}</h3>
+          {item.date && <span class="text-chip">{formatDate(item.date)}</span>}
+        </div>
+        {item.summary && <p>{item.summary}</p>}
+        {item.link && (
+          <div class="link-row">
+            <a class="text-link" href={item.link} target="_blank" rel="noreferrer">查看原始链接</a>
+          </div>
+        )}
+      </div>
+    </article>
+  ))}
+</div>

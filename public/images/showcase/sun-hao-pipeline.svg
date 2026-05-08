@@ -1,0 +1,20 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="675" rx="40" fill="url(#bg)"/>
+  <rect x="48" y="48" width="1104" height="579" rx="28" fill="rgba(255,255,255,0.72)" stroke="rgba(255,255,255,0.9)"/>
+  <circle cx="1030" cy="140" r="110" fill="#2563EB" fill-opacity="0.18"/>
+  <circle cx="920" cy="210" r="48" fill="#2563EB" fill-opacity="0.22"/>
+  <rect x="96" y="120" width="360" height="28" rx="14" fill="#2563EB" fill-opacity="0.24"/>
+  <text x="96" y="220" fill="#16324F" font-size="54" font-family="Arial, sans-serif" font-weight="700">Pipeline Board</text>
+  <text x="96" y="278" fill="#58708F" font-size="28" font-family="Arial, sans-serif">Assetization workflow planning overview</text>
+  <rect x="96" y="340" width="420" height="18" rx="9" fill="#D7E6FF"/>
+  <rect x="96" y="380" width="520" height="18" rx="9" fill="#D7E6FF"/>
+  <rect x="96" y="420" width="470" height="18" rx="9" fill="#D7E6FF"/>
+  <rect x="96" y="500" width="170" height="54" rx="27" fill="#2563EB"/>
+  <text x="132" y="535" fill="#FFFFFF" font-size="24" font-family="Arial, sans-serif" font-weight="700">Preview</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="675" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEF4FF"/>
+      <stop offset="1" stop-color="#F6F0FF"/>
+    </linearGradient>
+  </defs>
+</svg>

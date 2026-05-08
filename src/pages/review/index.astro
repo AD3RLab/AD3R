@@ -61,6 +61,7 @@ const topicActions = researchTopics
   .filter((topic) => ["tracking", "researching", "validating"].includes(topic.status))
   .flatMap((topic) =>
     topic.nextSteps.map((step) => ({
+      id: topic.id,
       title: topic.title,
       status: topic.status,
       updatedAt: topic.updatedAt,
@@ -69,6 +70,13 @@ const topicActions = researchTopics
     }))
   )
   .slice(0, 10);
+
+const topicBoard = researchTopics
+  .map((topic) => ({
+    ...topic,
+    memberNames: topic.memberIds.map((id) => memberMap[id]?.name ?? id).join("、")
+  }))
+  .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt));
 
 const recentFeed = [
   ...newsEntries.slice(0, 3).map((entry) => ({
@@ -89,20 +97,26 @@ const recentFeed = [
 ---
 
 <Layout title="组会栏" description="集中查看项目推进、近期里程碑、课题行动项与最新更新，方便 AD3R 在组会中快速对齐进度。">
-  <section class="page-hero card surface-gradient">
+  <section class="page-hero card surface-gradient section-panel">
     <p class="section-eyebrow">Review</p>
     <h1>组会栏</h1>
     <p>把项目推进、里程碑、课题动作和最新动态汇总到一个页面，用于组会、周会和阶段性复盘；站点其他页面继续保持常规官网展示用途。</p>
+    <div class="anchor-row">
+      <a class="text-chip" href="#review-milestones">近期里程碑</a>
+      <a class="text-chip" href="#review-topics">课题状态</a>
+      <a class="text-chip" href="#review-projects">项目推进</a>
+      <a class="text-chip" href="#review-updates">近期更新</a>
+    </div>
   </section>
 
-  <section class="stat-grid meeting-grid">
+  <section class="stat-grid meeting-grid section-panel section-panel-alt">
     <article class="stat-card card"><strong>{reviewStats.activeProjects}</strong><span>活跃项目</span></article>
     <article class="stat-card card"><strong>{reviewStats.doingMilestones}</strong><span>进行中里程碑</span></article>
     <article class="stat-card card"><strong>{reviewStats.validatingTopics}</strong><span>重点课题推进中</span></article>
     <article class="stat-card card"><strong>{reviewStats.recentItems}</strong><span>近期动态与更新</span></article>
   </section>
 
-  <section class="grid grid-sidebar">
+  <section class="grid grid-sidebar section-panel" id="review-milestones">
     <article class="card">
       <SectionHeader
         title="近期里程碑"
@@ -140,7 +154,7 @@ const recentFeed = [
         {topicActions.map((item) => (
           <article class="action-card">
             <div class="card-heading split-wrap">
-              <h3>{item.title}</h3>
+              <h3><a href={withBase(`/topics/${item.id}/`)}>{item.title}</a></h3>
               <span class="text-chip">{topicStatusLabels[item.status]}</span>
             </div>
             <p>{item.step}</p>
@@ -154,7 +168,29 @@ const recentFeed = [
     </article>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt" id="review-topics">
+    <SectionHeader title="课题状态面板" description="直接查看所有课题当前状态、负责人和最近进展，可一键跳到详情页继续展开。" />
+    <div class="grid grid-2">
+      {topicBoard.map((topic) => (
+        <article class="card action-card">
+          <div class="card-heading split-wrap">
+            <h3><a href={withBase(`/topics/${topic.id}/`)}>{topic.title}</a></h3>
+            <span class="text-chip">{topicStatusLabels[topic.status]}</span>
+          </div>
+          <p>{topic.progress}</p>
+          <div class="meta-list">
+            <span>相关成员：{topic.memberNames}</span>
+            <span>最近更新：{formatDate(topic.updatedAt)}</span>
+          </div>
+          <div class="tag-row compact">
+            {topic.nextSteps.slice(0, 2).map((step) => <span class="text-chip">{step}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-panel" id="review-projects">
     <SectionHeader title="项目推进看板" description="逐个项目查看负责人、当前里程碑和最近更新，适合组会快速过整体规划。" />
     <div class="grid grid-3">
       {projectBoard.map((project) => (
@@ -188,7 +224,7 @@ const recentFeed = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt" id="review-updates">
     <SectionHeader title="近期动态与更新" description="用于会前快速回顾最近输出，避免遗漏阶段性更新。" />
     <div class="timeline card">
       {recentFeed.map((item) => (

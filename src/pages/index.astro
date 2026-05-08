@@ -58,11 +58,11 @@ const timeline = [
     ]}
   />
 
-  <section class="grid grid-2">
+  <section class="grid grid-2 section-panel">
     <article class="card">
       <SectionHeader title="团队简介" eyebrow="Overview" />
       <p>{siteConfig.mission}</p>
-      <p class="muted">团队主要面向 {siteConfig.audience.join("、")}，重点解决影子数据利用、稀有场景复现、仿真数据闭环和真实世界资产化等关键问题。</p>
+      <p class="muted">当前站点以项目、课题、成果和动态四条主线组织信息，方便对外展示团队建设重点，也便于内部同步阶段进展。</p>
     </article>
     <article class="card">
       <SectionHeader title="核心研究方向" eyebrow="Focus" />
@@ -72,10 +72,10 @@ const timeline = [
     </article>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt">
     <SectionHeader
-      title="核心能力建设"
-      description="围绕真实场景重建、3DGS 表达、动静态分离、尺度恢复、渲染接入和语义增强，持续建设面向自动驾驶的数据资产化能力。"
+      title="能力框架"
+      description="以下能力用于概括 AD3R 当前的建设方向，避免与上方团队简介重复叙述。"
     />
     <div class="grid grid-3">
       {siteConfig.capabilities.map((item) => (
@@ -87,7 +87,7 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel">
     <SectionHeader
       title="内部协同"
       description="组会、周会或阶段复盘时，可直接进入专门的组会栏查看里程碑、行动项和最近更新。"
@@ -99,7 +99,7 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt">
     <SectionHeader
       title="重点产品与项目"
       description="围绕自动驾驶场景重建、3DGS 表达、场景编辑与导出渲染能力，持续建设可复用的技术资产。"
@@ -117,7 +117,7 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel">
     <SectionHeader
       title="最新动态"
       description="记录团队在自动驾驶场景重建、导出渲染与场景资产化方向上的阶段性进展。"
@@ -129,7 +129,7 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt">
     <SectionHeader
       title="代表性成果"
       description="展示技术综述、报告、软件原型、专利申请、演示系统与阶段性工程成果。"
@@ -141,7 +141,7 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel">
     <SectionHeader
       title="当前追踪课题"
       description="覆盖追踪、研究、验证、完成和暂停等不同阶段，帮助团队持续观察 3D 场景资产化中的关键问题。"
@@ -155,14 +155,14 @@ const timeline = [
     </div>
   </section>
 
-  <section>
+  <section class="section-panel section-panel-alt">
     <SectionHeader title="核心成员" description="成员覆盖 3DGS、SLAM、深度估计、产品规划、UE 渲染与技术美术等关键角色。" linkHref={withBase("/members/")} linkLabel="查看全部成员" />
     <div class="grid grid-3">
       {featuredMembers.map((member) => <MemberCard member={member} achievementCount={member.achievementIds.length} />)}
     </div>
   </section>
 
-  <section>
+  <section class="section-panel">
     <SectionHeader title="最新时间线" description="用时间线快速浏览团队最近的重要动态、迭代节点和版本更新。" />
     <div class="timeline card">
       {timeline.map((item) => (

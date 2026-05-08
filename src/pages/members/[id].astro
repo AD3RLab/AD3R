@@ -1,8 +1,9 @@
-﻿---
+---
 import Layout from "../../components/Layout.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import AchievementCard from "../../components/AchievementCard.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import ShowcaseGallery from "../../components/ShowcaseGallery.astro";
 import Badge from "../../components/Badge.astro";
 import { members } from "../../data/members";
 import { projects } from "../../data/projects";
@@ -72,6 +73,13 @@ const publications = relatedAchievements.filter((achievement) => ["paper", "arti
           {relatedAchievements.map((achievement) => <AchievementCard achievement={achievement} />)}
         </div>
       </article>
+
+      {member.showcase && member.showcase.length > 0 && (
+        <article class="card">
+          <SectionHeader title="阶段成果展示" description="适合展示成员负责的图片、视频、Demo 截图或阶段性表达物。" />
+          <ShowcaseGallery items={member.showcase} />
+        </article>
+      )}
     </div>
 
     <aside class="detail-sidebar">

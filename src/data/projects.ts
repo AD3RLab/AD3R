@@ -1,3 +1,5 @@
+import type { ShowcaseMedia } from "./media";
+
 export type ProjectStatus = "planning" | "active" | "maintenance" | "archived";
 
 export type Project = {
@@ -13,6 +15,7 @@ export type Project = {
   repoUrl?: string;
   demoUrl?: string;
   cover?: string;
+  showcase?: ShowcaseMedia[];
   features: string[];
   roadmap: {
     title: string;
@@ -42,6 +45,24 @@ export const projects: Project[] = [
     memberIds: ["liu-qihan", "li-yan-dong", "gao-jin-ming"],
     repoUrl: "https://gitee.com/rec-any-thing/awesome-3dgs-autonomous-driving",
     cover: "/images/projects/ad3r-scene-engine.svg",
+    showcase: [
+      {
+        id: "scene-engine-shot-01",
+        title: "道路场景重建预览",
+        kind: "image",
+        src: "/images/showcase/scene-engine-road-preview.svg",
+        summary: "展示自动驾驶道路片段在 3DGS 管线中的阶段性重建效果。",
+        date: "2026-04-28"
+      },
+      {
+        id: "scene-engine-shot-02",
+        title: "尺度恢复验证画面",
+        kind: "image",
+        src: "/images/showcase/scene-engine-scale-validate.svg",
+        summary: "用于对比尺度恢复与多模态几何对齐之后的视觉结果。",
+        date: "2026-04-02"
+      }
+    ],
     features: [
       "从车端多相机与视频数据构建高保真 3DGS 场景",
       "支持尺度恢复、轨迹约束和多模态几何对齐",
@@ -80,6 +101,24 @@ export const projects: Project[] = [
     leaderId: "shao-lei",
     memberIds: ["liu-qihan", "sun-hao", "shao-lei", "xiao-han"],
     cover: "/images/projects/ad3r-scene-bridge.svg",
+    showcase: [
+      {
+        id: "scene-bridge-shot-01",
+        title: "UE 导入效果截图",
+        kind: "image",
+        src: "/images/showcase/scene-bridge-ue-shot.svg",
+        summary: "展示导入 Unreal Engine 后的场景表现与观察视角。",
+        date: "2026-04-12"
+      },
+      {
+        id: "scene-bridge-shot-02",
+        title: "Web 轻量展示页面",
+        kind: "image",
+        src: "/images/showcase/scene-bridge-web-shot.svg",
+        summary: "展示 Web 端轻量化预览界面的阶段样式与信息结构。",
+        date: "2026-03-08"
+      }
+    ],
     features: [
       "支持将重建场景导出到 Unreal Engine 和 Web 端",
       "支持演示级场景播放、镜头观察和可视化表达",
@@ -118,6 +157,24 @@ export const projects: Project[] = [
     leaderId: "li-yan-dong",
     memberIds: ["li-yan-dong", "gao-jin-ming", "sun-hao", "xiao-han"],
     cover: "/images/projects/ad3r-actor-forge.svg",
+    showcase: [
+      {
+        id: "actor-forge-shot-01",
+        title: "动态 Actor 分层示意",
+        kind: "image",
+        src: "/images/showcase/actor-forge-layering.svg",
+        summary: "展示车辆、行人和骑行者在分层建模中的结构化表达方式。",
+        date: "2026-04-18"
+      },
+      {
+        id: "actor-forge-shot-02",
+        title: "事件复现流程草图",
+        kind: "image",
+        src: "/images/showcase/actor-forge-replay.svg",
+        summary: "用于说明事件复现、场景编辑与回放链路的关系。",
+        date: "2026-04-10"
+      }
+    ],
     features: [
       "分离静态道路环境与动态交通参与者",
       "支持关键 actor 的结构化资产表示",

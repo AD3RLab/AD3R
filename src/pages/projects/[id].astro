@@ -1,8 +1,9 @@
-﻿---
+---
 import Layout from "../../components/Layout.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import StatusBadge from "../../components/StatusBadge.astro";
 import AchievementCard from "../../components/AchievementCard.astro";
+import ShowcaseGallery from "../../components/ShowcaseGallery.astro";
 import Badge from "../../components/Badge.astro";
 import { projects } from "../../data/projects";
 import { members } from "../../data/members";
@@ -58,13 +59,12 @@ const relatedAchievements = achievements.filter((achievement) => (achievement.pr
         </ul>
       </article>
 
-      <article class="card">
-        <SectionHeader title="产品截图区域" description="当前使用占位图，后续可直接替换 `public/images/projects/` 下的文件。" />
-        <div class="screenshot-grid">
-          <img src={withBase(project.cover ?? "/images/projects/aurora-platform.svg")} alt={`${project.name} 截图 1`} class="detail-cover" />
-          <img src={withBase(project.cover ?? "/images/projects/aurora-platform.svg")} alt={`${project.name} 截图 2`} class="detail-cover" />
-        </div>
-      </article>
+      {project.showcase && project.showcase.length > 0 && (
+        <article class="card">
+          <SectionHeader title="阶段成果展示" description="可直接在项目数据里维护图片或视频条目，不需要额外改页面模板。" />
+          <ShowcaseGallery items={project.showcase} />
+        </article>
+      )}
 
       <article class="card">
         <SectionHeader title="Roadmap" />

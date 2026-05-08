@@ -1,3 +1,5 @@
+import type { ShowcaseMedia } from "./media";
+
 export type Member = {
   id: string;
   name: string;
@@ -11,6 +13,7 @@ export type Member = {
   github?: string;
   gitee?: string;
   homepage?: string;
+  showcase?: ShowcaseMedia[];
   projectIds: string[];
   achievementIds: string[];
 };
@@ -26,6 +29,16 @@ export const members: Member[] = [
     researchAreas: ["3D Gaussian Splatting", "计算机视觉", "强化学习"],
     skills: ["3DGS", "Computer Vision", "Reinforcement Learning", "AI System"],
     email: "liu.qihan@kotei.com.cn",
+    showcase: [
+      {
+        id: "liu-qihan-demo-01",
+        title: "长距离道路场景重建阶段演示",
+        kind: "image",
+        src: "/images/showcase/liu-qihan-road-demo.svg",
+        summary: "用于展示长距离道路场景的 3DGS 重建效果与观察视角。",
+        date: "2026-04-28"
+      }
+    ],
     projectIds: ["ad3r-scene-engine", "ad3r-scene-bridge"],
     achievementIds: ["achv-001", "achv-004", "achv-007"]
   },
@@ -39,6 +52,16 @@ export const members: Member[] = [
     researchAreas: ["3D 重建", "SLAM", "几何一致性"],
     skills: ["SfM", "SLAM", "Calibration", "Geometry"],
     email: "li.yandong@kotei.com.cn",
+    showcase: [
+      {
+        id: "li-yandong-demo-01",
+        title: "动态 Actor 分层验证截图",
+        kind: "image",
+        src: "/images/showcase/li-yandong-actor-validate.svg",
+        summary: "用于跟踪动态交通参与者分层建模和验证结果。",
+        date: "2026-04-18"
+      }
+    ],
     projectIds: ["ad3r-scene-engine", "ad3r-actor-forge"],
     achievementIds: ["achv-001", "achv-005", "achv-008"]
   },
@@ -52,6 +75,16 @@ export const members: Member[] = [
     researchAreas: ["深度估计", "多模态融合", "尺度恢复"],
     skills: ["Depth Estimation", "Multi-view", "Fusion", "PyTorch"],
     email: "gao.jinming@kotei.com.cn",
+    showcase: [
+      {
+        id: "gao-jin-ming-demo-01",
+        title: "多模态尺度恢复分析图",
+        kind: "image",
+        src: "/images/showcase/gao-jin-ming-scale.svg",
+        summary: "展示尺度恢复与几何一致性分析过程中的阶段结论。",
+        date: "2026-04-21"
+      }
+    ],
     projectIds: ["ad3r-scene-engine", "ad3r-actor-forge"],
     achievementIds: ["achv-002", "achv-006", "achv-008"]
   },
@@ -65,6 +98,16 @@ export const members: Member[] = [
     researchAreas: ["产品规划", "需求分析", "场景资产化"],
     skills: ["Product Design", "Planning", "Roadmap", "Collaboration"],
     email: "sun.hao@kotei.com.cn",
+    showcase: [
+      {
+        id: "sun-hao-demo-01",
+        title: "场景资产化流程看板",
+        kind: "image",
+        src: "/images/showcase/sun-hao-pipeline.svg",
+        summary: "展示从采集到重建、编辑、导出和演示的阶段流程结构。",
+        date: "2026-04-26"
+      }
+    ],
     projectIds: ["ad3r-scene-bridge", "ad3r-actor-forge"],
     achievementIds: ["achv-004", "achv-009"]
   },
@@ -78,6 +121,16 @@ export const members: Member[] = [
     researchAreas: ["Unreal Engine", "实时渲染", "场景导出"],
     skills: ["UE", "Rendering", "Shader", "Pipeline"],
     email: "shao.lei@kotei.com.cn",
+    showcase: [
+      {
+        id: "shao-lei-demo-01",
+        title: "UE 场景导入演示画面",
+        kind: "image",
+        src: "/images/showcase/shao-lei-ue-preview.svg",
+        summary: "展示重建场景导入 Unreal Engine 后的阶段性效果。",
+        date: "2026-04-12"
+      }
+    ],
     projectIds: ["ad3r-scene-bridge"],
     achievementIds: ["achv-003", "achv-005", "achv-010"]
   },
@@ -91,6 +144,16 @@ export const members: Member[] = [
     researchAreas: ["技术美术", "场景编辑", "资产表现"],
     skills: ["Technical Art", "Scene Editing", "Material", "Visualization"],
     email: "xiao.han@kotei.com.cn",
+    showcase: [
+      {
+        id: "xiao-han-demo-01",
+        title: "场景资产表现与编辑示意",
+        kind: "image",
+        src: "/images/showcase/xiao-han-asset-visual.svg",
+        summary: "展示场景资产整理、视觉表现和编辑界面的阶段产出。",
+        date: "2026-04-20"
+      }
+    ],
     projectIds: ["ad3r-scene-bridge", "ad3r-actor-forge"],
     achievementIds: ["achv-003", "achv-006", "achv-009"]
   }

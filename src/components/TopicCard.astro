@@ -1,8 +1,9 @@
-﻿---
+---
 import type { ResearchTopic } from "../data/researchTopics";
 import StatusBadge from "./StatusBadge.astro";
 import Badge from "./Badge.astro";
 import { topicStatusLabels, formatDate } from "../utils/format";
+import { withBase } from "../utils/links";
 
 interface Props {
   topic: ResearchTopic;
@@ -14,7 +15,7 @@ const { topic, memberNames } = Astro.props;
 
 <article class="card topic-card">
   <div class="card-heading split-wrap">
-    <h3>{topic.title}</h3>
+    <h3><a href={withBase(`/topics/${topic.id}/`)}>{topic.title}</a></h3>
     <StatusBadge status={topic.status} label={topicStatusLabels[topic.status]} />
   </div>
   <p>{topic.background}</p>

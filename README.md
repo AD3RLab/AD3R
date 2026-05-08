@@ -35,6 +35,8 @@ AD3R，全称 `Autonomous Driving 3D Reconstruction Lab`，是一个面向自动
 - 成员、项目、成果、课题各自独立维护，不会散落在页面模板中
 - 新闻和更新日志直接用 Markdown 编写，不需要改 Astro 页面
 - 成员详情页和项目详情页通过 `id` 自动建立关联，减少重复录入
+- 首页、组会页、成员详情页、项目详情页会自动汇总相关数据，通常不需要手动改首页内容
+- 项目和成员的阶段成果展示支持统一的 `showcase` 字段，新增图片或视频时只改数据
 - 页面样式集中在 `src/styles/global.css`，统一调整成本低
 - 站点采用纯静态生成，部署简单，不依赖后端和数据库
 
@@ -125,13 +127,18 @@ base: "/AD3R"
 
 ## 如何新增团队成员
 
-只需要修改：
+通常只需要修改：
 
 - `src/data/members.ts`
 
 并添加头像到：
 
 - `public/images/members/`
+
+如果成员还想补自己的阶段成果展示，可选地继续补充：
+
+- `showcase` 字段
+- 媒体文件放到 `public/images/showcase/` 或 `public/videos/`
 
 当前成员邮箱统一采用以下格式：
 
@@ -147,7 +154,7 @@ base: "/AD3R"
 
 ## 如何新增项目
 
-只需要修改：
+通常只需要修改：
 
 - `src/data/projects.ts`
 
@@ -166,6 +173,11 @@ base: "/AD3R"
 项目封面图建议放在：
 
 - `public/images/projects/`
+
+如果项目要展示阶段 Demo、截图或视频，可直接维护：
+
+- `showcase` 字段
+- 媒体文件放到 `public/images/showcase/` 或 `public/videos/`
 
 ## 如何新增成果
 
@@ -197,6 +209,12 @@ base: "/AD3R"
 - `validating`
 - `completed`
 - `paused`
+
+课题详情页会自动生成：
+
+- `/topics/<id>/`
+
+组会页中的课题卡也会直接跳到对应详情。
 
 ## 如何新增新闻动态
 
@@ -300,6 +318,60 @@ base: "/"
 
 大多数页面会自动根据 `id` 建立成员、项目、成果之间的关联，不需要再修改页面模板。
 
+### 推荐维护方式
+
+为了尽量不给团队成员增加负担，建议按下面的最小更新路径维护：
+
+- 成员信息变更：只改 `src/data/members.ts` 中自己的那一段
+- 项目进展更新：只改 `src/data/projects.ts` 中对应项目的 `updates`、`roadmap`
+- 课题状态变更：只改 `src/data/researchTopics.ts` 中对应课题的 `status`、`progress`、`nextSteps`
+- 新闻公告：只在 `src/content/news/` 新增 Markdown
+- 网站版本变化：只在 `src/content/changelog/` 新增 Markdown
+
+### 首页和组会页如何自动更新
+
+下面这些页面不建议手工修改内容，而是通过数据自动生成：
+
+- 首页：自动读取项目、成果、课题、动态与成员的最新数据
+- 组会页 `/review/`：自动读取项目里程碑、项目更新、课题状态和行动项
+- 成员详情页：自动读取成员关联项目、成果与个人阶段展示
+- 项目详情页：自动读取项目关联成员、成果与阶段展示
+
+也就是说，大多数成员只需要更新数据文件，不需要改页面模板本身。
+
+### 阶段成果展示怎么维护
+
+项目和成员都支持可选的 `showcase` 字段，适合放：
+
+- 图片截图
+- Demo 录屏
+- 阶段汇报图
+- Web 演示链接
+- 视频文件
+
+字段结构示例：
+
+```ts
+showcase: [
+  {
+    id: "scene-engine-shot-01",
+    title: "道路场景重建预览",
+    kind: "image",
+    src: "/images/showcase/scene-engine-road-preview.svg",
+    summary: "展示自动驾驶道路片段在 3DGS 管线中的阶段性重建效果。",
+    date: "2026-04-28"
+  }
+]
+```
+
+建议规范：
+
+- 项目级展示写在 `src/data/projects.ts`
+- 成员个人展示写在 `src/data/members.ts`
+- 图片统一放 `public/images/showcase/`
+- 视频统一放 `public/videos/`
+- 如果素材较大，可只放封面图和外部链接
+
 ## 常见问题
 
 ### 1. 为什么打开后样式或图片丢失？
@@ -331,3 +403,13 @@ base: "/AD3R"
 - `/members/gao-jin-ming/`
 
 如果你修改了成员 `id`，路由也会随之变化。
+
+### 4. 为什么我改了数据，首页和组会页也会跟着变？
+
+因为首页、项目页、成员页和组会页都尽量采用自动聚合方式生成。
+
+这是一种刻意的设计：
+
+- 减少重复录入
+- 避免多处修改不一致
+- 让成员只维护自己相关的数据块
