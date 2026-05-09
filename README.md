@@ -7,6 +7,125 @@ AD3R，全称 `Autonomous Driving 3D Reconstruction Lab`，是一个面向自动
 - GitHub：`https://github.com/AD3RLab/AD3R`
 - Gitee：`https://gitee.com/rec-any-thing/ad3-r`
 
+## 先看这里
+
+如果你不想读完整份 README，只想一步步完成操作，请先看这一节。
+
+### 0. 所有命令在哪里运行
+
+下面所有命令，默认都在项目根目录运行：
+
+```text
+d:\04_kotei_project\project
+```
+
+如果你刚打开终端，还没进入项目目录，请先执行：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+```
+
+如果你已经在这个目录里，就不需要重复执行。
+
+### 1. 第一次拿到项目，先安装依赖
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm install
+```
+
+执行完成后，后面大多数操作都可以继续在这个目录里进行。
+
+### 2. 如果你只是想修改网站内容
+
+直接启动本地内容更新器：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run updater
+```
+
+然后按下面顺序操作：
+
+1. 在更新器里修改内容
+2. 点击保存
+3. 点击“启动预览”或“打开网站”查看效果
+4. 如果确认没问题，再点击“构建并发布”
+
+### 3. 如果你只是想在本机看网页效果
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run dev
+```
+
+然后浏览器打开：
+
+```text
+http://localhost:4321/AD3R/
+```
+
+### 4. 如果你想让局域网内其他人访问这台机器上的网页
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run preview -- --host 0.0.0.0 --port 4321
+```
+
+然后让其他人在浏览器打开：
+
+```text
+http://你的电脑内网IP:4321/AD3R/
+```
+
+例如：
+
+```text
+http://192.168.1.20:4321/AD3R/
+```
+
+### 5. 如果你要部署到一台正式本地服务器
+
+先生成静态文件：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run build
+```
+
+生成完成后，把下面这个目录里的文件部署到服务器：
+
+```text
+d:\04_kotei_project\project\dist
+```
+
+### 6. 如果你要发布到 GitHub
+
+有两种方式：
+
+- 最简单：直接在更新器里点击“构建并发布”
+- 手动方式：在项目根目录执行
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run build
+git add .
+git commit -m "你的提交说明"
+git push origin main
+```
+
+### 7. 如果你要备份到 Gitee
+
+在项目根目录执行：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+git push gitee main
+git push gitee main:master
+```
+
+第一条会更新 `gitee/main`，第二条会同步更新 `gitee/master`。
+
 ## 技术栈
 
 - Astro
@@ -81,13 +200,38 @@ npm run preview
 npm run updater
 ```
 
+说明：
+
+- 这些命令都要在项目根目录 `d:\04_kotei_project\project` 下执行
+- 如果已经打开了本地终端，先运行：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+```
+
 ## 本地内容更新器
 
 项目现在提供一个本地桌面更新器，适合不直接改代码的成员维护内容。
 
 启动方式：
 
-```bash
+```powershell
+npm install
+npm run updater
+```
+
+推荐完整步骤：
+
+1. 打开 PowerShell
+2. 进入项目根目录：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+```
+
+3. 启动更新器：
+
+```powershell
 npm install
 npm run updater
 ```
@@ -139,13 +283,15 @@ npm run updater
 
 1. 安装依赖
 
-```bash
+```powershell
+Set-Location "d:\04_kotei_project\project"
 npm install
 ```
 
 2. 启动开发服务器
 
-```bash
+```powershell
+Set-Location "d:\04_kotei_project\project"
 npm run dev
 ```
 
@@ -163,6 +309,239 @@ base: "/AD3R"
 ```
 
 如果你改为根路径部署，请把 `base` 改成 `/`。
+
+## 如何部署到本地服务器
+
+如果你想在自己的电脑或公司内网服务器上部署网页，常用方式有两种。
+
+### 方式一：直接在本机临时预览
+
+适合先快速查看效果，或者让同一局域网内的同事临时访问。
+
+1. 安装依赖
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm install
+```
+
+2. 启动本地预览服务
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run preview -- --host 0.0.0.0 --port 4321
+```
+
+3. 浏览器访问
+
+```text
+http://localhost:4321/AD3R/
+```
+
+如果需要让局域网内其他电脑访问，把 `localhost` 改成你当前机器的内网 IP，例如：
+
+```text
+http://192.168.1.20:4321/AD3R/
+```
+
+### 方式二：生成静态文件后部署到正式本地服务器
+
+适合部署到公司内网机器、Windows 服务器、Nginx、IIS、宝塔等静态站点环境。
+
+1. 安装依赖并构建
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm install
+npm run build
+```
+
+2. 构建完成后，静态产物位于：
+
+```text
+dist/
+```
+
+3. 将 `dist/` 目录中的内容部署到你的静态服务器目录
+
+支持的方式包括：
+
+- Nginx
+- IIS
+- Apache
+- 宝塔静态站点
+- 任意可托管 HTML / CSS / JS 的本地 Web 服务
+
+### 当前路径配置说明
+
+当前项目默认配置为：
+
+```js
+site: "https://ad3rlab.github.io",
+base: "/AD3R"
+```
+
+这表示网站默认按下面的路径访问：
+
+```text
+http://服务器地址/AD3R/
+```
+
+也就是说：
+
+- 如果你本地服务器准备使用 `http://server/AD3R/` 访问，则不用改
+- 如果你希望直接使用 `http://server/` 访问，则需要把 `base` 改成 `/`
+
+### 部署到根路径时的配置
+
+如果你希望网站直接挂在根路径，例如：
+
+```text
+http://192.168.1.20/
+```
+
+请修改 [astro.config.mjs](file:///d:/04_kotei_project/project/astro.config.mjs)：
+
+```js
+export default defineConfig({
+  site: "http://192.168.1.20",
+  base: "/",
+  output: "static",
+  trailingSlash: "always",
+  integrations: [mdx()]
+});
+```
+
+修改后重新执行：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run build
+```
+
+### 部署到子路径时的配置
+
+如果你希望网站挂在子路径，例如：
+
+```text
+http://192.168.1.20/ad3r/
+```
+
+请修改 [astro.config.mjs](file:///d:/04_kotei_project/project/astro.config.mjs)：
+
+```js
+export default defineConfig({
+  site: "http://192.168.1.20",
+  base: "/ad3r",
+  output: "static",
+  trailingSlash: "always",
+  integrations: [mdx()]
+});
+```
+
+修改后同样重新执行：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run build
+```
+
+### 推荐做法
+
+- 临时共享给同事看：直接使用 `npm run preview -- --host 0.0.0.0 --port 4321`
+- 长期稳定运行：使用 `npm run build` 后，将 `dist/` 部署到 Nginx 或 IIS
+- 如果希望和 GitHub Pages 保持一致，建议继续保留 `base: "/AD3R"`
+
+## 一份可直接用的配置
+
+下面给三份最常用的 `astro.config.mjs` 配置模板，直接按你的部署场景替换。
+
+### 配置一：继续用于 GitHub Pages
+
+适合访问地址：
+
+```text
+https://ad3rlab.github.io/AD3R/
+```
+
+```js
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+
+export default defineConfig({
+  site: "https://ad3rlab.github.io",
+  base: "/AD3R",
+  output: "static",
+  trailingSlash: "always",
+  integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      theme: "github-light"
+    }
+  }
+});
+```
+
+### 配置二：部署到本地服务器根路径
+
+适合访问地址：
+
+```text
+http://192.168.1.20/
+```
+
+```js
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+
+export default defineConfig({
+  site: "http://192.168.1.20",
+  base: "/",
+  output: "static",
+  trailingSlash: "always",
+  integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      theme: "github-light"
+    }
+  }
+});
+```
+
+### 配置三：部署到本地服务器子路径
+
+适合访问地址：
+
+```text
+http://192.168.1.20/ad3r/
+```
+
+```js
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
+
+export default defineConfig({
+  site: "http://192.168.1.20",
+  base: "/ad3r",
+  output: "static",
+  trailingSlash: "always",
+  integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      theme: "github-light"
+    }
+  }
+});
+```
+
+### 修改配置之后要做什么
+
+只要你改了 `astro.config.mjs`，都需要重新构建：
+
+```powershell
+Set-Location "d:\04_kotei_project\project"
+npm run build
+```
 
 ## 如何修改团队信息
 
