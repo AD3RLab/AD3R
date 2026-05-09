@@ -96,11 +96,11 @@ const recentFeed = [
   .slice(0, 6);
 ---
 
-<Layout title="组会面板" description="集中查看项目推进、里程碑、课题状态与近期更新，便于 AD3R 在周会中快速对齐进度。">
+<Layout title="组会面板" description="汇总 AD3R 当前项目推进、课题状态、里程碑与近期更新。">
   <section class="page-hero card surface-gradient section-panel">
     <p class="section-eyebrow">Review</p>
     <h1>组会面板</h1>
-    <p>聚合项目推进、课题状态、近期里程碑与最新更新，适用于周会、阶段复盘和研发进度同步。</p>
+    <p>汇总项目推进、课题状态、近期里程碑与最新更新，方便统一查看当前研发进展。</p>
     <div class="anchor-row">
       <a class="text-chip" href="#review-topics">课题总表</a>
       <a class="text-chip" href="#review-actions">待跟进事项</a>
@@ -121,7 +121,7 @@ const recentFeed = [
     <article class="card">
       <SectionHeader
         title="课题总表"
-        description="按最近更新时间排序，适合周会时快速查看每个课题的当前状态、下一步和详情入口。"
+        description="按最近更新时间展示课题状态、下一步与详情入口。"
         linkHref={withBase("/topics/")}
         linkLabel="查看全部课题"
       />
@@ -158,7 +158,7 @@ const recentFeed = [
     <article class="card">
       <SectionHeader
         title="待跟进事项"
-        description="聚焦当前仍在推进中的关键动作，适合在周会中逐条确认负责人和下一步。"
+        description="列出当前课题仍需推进的关键动作与相关成员。"
         linkHref={withBase("/topics/")}
         linkLabel="查看课题页"
       />
@@ -181,7 +181,7 @@ const recentFeed = [
   </section>
 
   <section class="section-panel" id="review-projects">
-    <SectionHeader title="项目推进总表" description="用紧凑视图浏览当前项目负责人、里程碑与最近更新，适合周会快速过一遍。"/>
+    <SectionHeader title="项目推进总表" description="汇总当前项目负责人、里程碑与最近更新。"/>
     <div class="table-wrap card scroll-panel tight">
       <table class="data-table">
         <thead>
@@ -210,7 +210,7 @@ const recentFeed = [
 
   <section class="section-panel section-panel-alt" id="review-milestones">
     <article class="card">
-      <SectionHeader title="近期里程碑" description="按目标时间排序，优先展示当前进行中和接下来需要推进的关键节点。" />
+      <SectionHeader title="近期里程碑" description="按目标时间展示近期需要推进的里程碑节点。" />
       <div class="table-wrap scroll-panel tight">
         <table class="data-table">
           <thead>
@@ -240,7 +240,7 @@ const recentFeed = [
 
   <section class="section-panel section-panel-alt" id="review-updates">
     <article class="card">
-      <SectionHeader title="近期动态与更新" description="会前快速回顾最近输出和版本变化。" />
+      <SectionHeader title="近期动态与更新" description="汇总最近的团队动态与版本更新。" />
       <div class="timeline scroll-panel tight">
         {recentFeed.map((item) => (
           <article class="timeline-item">
